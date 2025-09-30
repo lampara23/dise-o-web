@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>B-02: Catálogo de Productos</title>
+</head>
+<body>
+    <div>
+        <div>
+            <h3>Completo Clásico</h3>
+            <p>Precio: $1.500</p>
+        </div>
+        <div>
+            <h3>Hot Dog Supreme</h3>
+            <p>Precio: $2.500</p>
+        </div>
+        <div>
+            <h3>Completo Italiano</h3>
+            <p>Precio: $2.500</p>
+        </div>
+    </div>
+</body>
+</html>
