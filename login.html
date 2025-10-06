@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Doggy's</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .login-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+        }
+        
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="login-container p-4">
+                    <h1 class="text-center mb-4">🔐 Iniciar Sesión</h1>
+                    
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label">Email:</label>
+                            <input type="email" class="form-control" placeholder="tu@email.com" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Contraseña:</label>
+                            <input type="password" class="form-control" placeholder="••••••••" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100 mb-3">Ingresar</button>
+                    </form>
+                    
+                    <div class="text-center my-3">
+                        <span class="bg-dark px-2">o</span>
+                    </div>
+                    
+                    <form id="registerForm">
+                        <h5 class="text-center">¿Nuevo usuario? Regístrate</h5>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Nombre completo:</label>
+                            <input type="text" class="form-control" placeholder="Tu nombre" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Email:</label>
+                            <input type="email" class="form-control" placeholder="tu@email.com" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Contraseña:</label>
+                            <input type="password" class="form-control" id="password" placeholder="••••••••" required>
+                            
+                            <div class="mt-2">
+                                <small>La contraseña debe tener:</small>
+                                <div class="form-text">
+                                    <span id="length" class="text-danger">✓ 8+ caracteres</span><br>
+                                    <span id="uppercase" class="text-danger">✓ 1 mayúscula</span><br>
+                                    <span id="number" class="text-danger">✓ 1 número</span><br>
+                                    <span id="symbol" class="text-danger">✓ 1 símbolo</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Confirmar contraseña:</label>
+                            <input type="password" class="form-control" placeholder="••••••••" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success w-100" id="registerBtn" disabled>Crear Cuenta</button>
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        <a href="index.html" class="text-white">← Volver al inicio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const requirements = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                number: /[0-9]/.test(password),
+                symbol: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+            };
+            
+            Object.keys(requirements).forEach(key => {
+                const element = document.getElementById(key);
+                if (requirements[key]) {
+                    element.className = 'text-success';
+                } else {
+                    element.className = 'text-danger';
+                }
+            });
+            
+            const allValid = Object.values(requirements).every(valid => valid);
+            document.getElementById('registerBtn').disabled = !allValid;
+        });
+        
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            window.location.href = 'cuenta.html';
+        });
+        
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            window.location.href = 'cuenta.html';
+        });
+    </script>
+</body>
+</html>
