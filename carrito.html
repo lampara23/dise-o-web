@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito - Doggy's</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .nav-custom {
+            background: rgba(26, 26, 46, 0.95) !important;
+        }
+        
+        .cart-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .rarity-common { border-left: 4px solid #b0b0b0; }
+        .rarity-rare { border-left: 4px solid #0070dd; }
+        .rarity-epic { border-left: 4px solid #a335ee; }
+        .rarity-legendary { border-left: 4px solid #ff8000; }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-cart-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg nav-custom">
+        <div class="container">
+            <a class="navbar-brand text-white fw-bold" href="index.html">🌭 Doggy's</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-white mx-2" href="index.html">Inicio</a>
+                <a class="nav-link text-white mx-2" href="login.html">Iniciar Sesión</a>
+                <a class="nav-link text-white mx-2" href="rastreo.html">Rastrear</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">🛒 Carrito de Compras</h1>
+
+        <div id="cartSkeleton">
+            <div class="card cart-item skeleton mb-3" style="height: 100px;"></div>
+            <div class="card cart-item skeleton mb-3" style="height: 100px;"></div>
+        </div>
+
+        <div id="emptyCart" class="empty-cart" style="display: none;">
+            <div class="empty-cart-icon">🛒</div>
+            <h3>Tu carrito está vacío</h3>
+            <p>¡Agrega algunos productos deliciosos!</p>
+            <a href="index.html" class="btn btn-primary btn-lg">Ir a Comprar</a>
+        </div>
+
+        <div id="cartContent" style="display: none;">
+            <div id="cartItems">
+                <!-- Los productos del carrito se cargarán aquí -->
+            </div>
+
+            <div class="card cart-item mt-4">
+                <div class="card-body text-center">
+                    <h4>Subtotal: <span class="text-warning" id="subtotal">$0</span></h4>
+                    <p class="mb-2">+ Costo de envío: $1.000</p>
+                    <h3>Total a pagar: <span class="text-success" id="total">$0</span></h3>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-primary btn-lg me-2" onclick="checkout()">Continuar al Pago</button>
+                        <a href="index.html" class="btn btn-outline-light btn-lg">Seguir Comprando</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Funciones del carrito
+        function getCart() {
+            return JSON.parse(localStorage.getItem('doggyCart')) || [
+                { id: 1, name: "Completo Italiano", price: 2490, quantity: 2, rarity: "common" },
+                { id: 3, name: "Hot Dog Tradicional", price: 2190, quantity: 1, rarity: "common" }
+            ];
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem('doggyCart', JSON.stringify(cart));
+            loadCart();
+        }
+
+        function updateQuantity(productId, change) {
+            const cart = getCart();
+            const itemIndex = cart.findIndex(item => item.id === productId);
+            
+            if (itemIndex !== -1) {
+                const newQuantity = cart[itemIndex].quantity + change;
+                
+                // Validar límite máximo de 10 unidades (B-14)
+                if (newQuantity > 10) {
+                    alert('❌ Máximo 10 unidades por producto');
+                    return;
+                }
+                
+                // Validar mínimo de 1 unidad
+                if (newQuantity <= 0) {
+                    if (confirm('¿Eliminar producto del carrito?')) {
+                        cart.splice(itemIndex, 1);
+                        saveCart(cart);
+                        alert('🗑️ Producto eliminado del carrito');
+                    }
+                    return;
+                }
+                
+                cart[itemIndex].quantity = newQuantity;
+                saveCart(cart);
+                
+                // Mostrar confirmación de cambio
+                if (change > 0) {
+                    alert(`✅ Se agregó otra unidad de ${cart[itemIndex].name}`);
+                } else {
+                    alert(`📉 Se removió una unidad de ${cart[itemIndex].name}`);
+                }
+            }
+        }
+
+        function removeItem(productId) {
+            const cart = getCart();
+            const itemIndex = cart.findIndex(item => item.id === productId);
+            
+            if (itemIndex !== -1 && confirm('¿Estás seguro de eliminar este producto del carrito?')) {
+                const itemName = cart[itemIndex].name;
+                cart.splice(itemIndex, 1);
+                saveCart(cart);
+                alert(`🗑️ ${itemName} eliminado del carrito`);
+            }
+        }
+
+        function loadCart() {
+            const cart = getCart();
+            const cartItems = document.getElementById('cartItems');
+            const emptyCart = document.getElementById('emptyCart');
+            const cartContent = document.getElementById('cartContent');
+            
+            if (cart.length === 0) {
+                emptyCart.style.display = 'block';
+                cartContent.style.display = 'none';
+                return;
+            }
+            
+            emptyCart.style.display = 'none';
+            cartContent.style.display = 'block';
+            
+            let subtotal = 0;
+            
+            cartItems.innerHTML = cart.map(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                const rarityClass = `rarity-${item.rarity}`;
+                const maxReached = item.quantity >= 10;
+                
+                return `
+                    <div class="card cart-item mb-3 ${rarityClass}">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-4">
+                                    <h5>${item.name}</h5>
+                                    <p class="mb-0">$${item.price.toLocaleString()} c/u</p>
+                                    <small class="text-warning">${getRarityText(item.rarity)}</small>
+                                    ${maxReached ? '<small class="text-danger">🔴 Máximo alcanzado</small>' : ''}
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="quantity-controls">
+                                        <button class="btn btn-outline-light quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                                        <span class="btn btn-light px-3">${item.quantity}</span>
+                                        <button class="btn btn-outline-light quantity-btn" onclick="updateQuantity(${item.id}, 1)" ${maxReached ? 'disabled' : ''}>+</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <h5 class="text-warning">$${itemTotal.toLocaleString()}</h5>
+                                    <button class="btn btn-danger btn-sm" onclick="removeItem(${item.id})">🗑️ Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            const shipping = 1000;
+            const total = subtotal + shipping;
+            
+            document.getElementById('subtotal').textContent = `$${subtotal.toLocaleString()}`;
+            document.getElementById('total').textContent = `$${total.toLocaleString()}`;
+        }
+
+        function getRarityText(rarity) {
+            const rarityTexts = {
+                'common': 'Común',
+                'rare': 'Raro',
+                'epic': 'Épico',
+                'legendary': 'Legendario'
+            };
+            return rarityTexts[rarity] || '';
+        }
+
+        function checkout() {
+            const cart = getCart();
+            if (cart.length === 0) {
+                alert('🛒 Tu carrito está vacío');
+                return;
+            }
+            
+            // Verificar si el usuario está logueado (B-07)
+            const user = JSON.parse(localStorage.getItem('doggyUser'));
+            if (!user) {
+                alert('🔐 Debes iniciar sesión para continuar con el pago');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Checkout exitoso (B-07)
+            const orderNumber = 'DOG-' + Date.now();
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) + 1000;
+            
+            alert(`✅ ¡Pedido #${orderNumber} confirmado!\nTotal: $${total.toLocaleString()}\n\nGracias por tu compra ${user.name}!`);
+            
+            // Vaciar carrito después de compra (B-07)
+            localStorage.removeItem('doggyCart');
+            
+            // Redirigir a la página de cuenta
+            setTimeout(() => {
+                window.location.href = 'cuenta.html';
+            }, 2000);
+        }
+
+        // Simular carga y luego cargar el carrito real
+        setTimeout(() => {
+            document.getElementById('cartSkeleton').style.display = 'none';
+            loadCart();
+        }, 1000);
+    </script>
+</body>
+</html>
