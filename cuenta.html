@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Cuenta - Doggy's</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .nav-custom {
+            background: rgba(26, 26, 46, 0.95) !important;
+        }
+        
+        .section-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+        }
+        
+        .saved-item {
+            background: rgba(0, 212, 255, 0.2);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 212, 255, 0.4);
+        }
+        
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .order-badge {
+            font-size: 0.8rem;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg nav-custom">
+        <div class="container">
+            <a class="navbar-brand text-white fw-bold" href="index.html">🌭 Doggy's</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-white mx-2" href="index.html">Inicio</a>
+                <a class="nav-link text-white mx-2" href="carrito.html">Carrito</a>
+                <a class="nav-link text-white mx-2" href="rastreo.html">Rastrear</a>
+                <a class="nav-link text-white mx-2" href="login.html" onclick="logout()">Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">👤 Mi Cuenta</h1>
+        
+        <div class="section-card p-4 mb-4">
+            <div class="text-center">
+                <div class="user-avatar mx-auto">
+                    👤
+                </div>
+                <h3 id="userName">Cargando...</h3>
+                <p class="text-muted" id="userEmail">Cargando...</p>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <p><strong>📧 Email:</strong> <span id="userEmailText">Cargando...</span></p>
+                    <p><strong>📞 Teléfono:</strong> +56 9 1234 5678</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>🆔 ID de usuario:</strong> <span id="userId">Cargando...</span></p>
+                    <p><strong>📅 Miembro desde:</strong> <span id="memberSince">Cargando...</span></p>
+                </div>
+            </div>
+            <button class="btn btn-outline-light mt-3" onclick="editProfile()">✏️ Editar Información</button>
+        </div>
+
+        <div class="section-card p-4 mb-4">
+            <h3>🏠 Mis Direcciones (B-15)</h3>
+            
+            <div class="saved-item p-3 mb-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5>🏠 Casa Principal</h5>
+                        <p class="mb-1">Av. Principal 123, Santiago Centro</p>
+                        <p class="mb-1"><small>📌 Referencia: Frente al parque central</small></p>
+                        <p class="mb-0"><small>🚪 Instrucciones: Timbre 3 veces, departamento 4B</small></p>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-light me-1" onclick="editAddress('casa')">✏️ Editar</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteAddress('casa')">🗑️ Eliminar</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="saved-item p-3 mb-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5>💼 Oficina</h5>
+                        <p class="mb-1">Calle Secundaria 456, Oficina 201, Las Condes</p>
+                        <p class="mb-1"><small>📌 Referencia: Edificio azul, piso 2</small></p>
+                        <p class="mb-0"><small>🚪 Instrucciones: Preguntar por recepción, decir que es para Juan Pérez</small></p>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-light me-1" onclick="editAddress('oficina')">✏️ Editar</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteAddress('oficina')">🗑️ Eliminar</button>
+                    </div>
+                </div>
+            </div>
+
+            <h5 class="mt-4">➕ Agregar Nueva Dirección</h5>
+            <form onsubmit="addNewAddress(event)">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">🏷️ Alias (Casa, Trabajo, etc.):</label>
+                        <input type="text" class="form-control" placeholder="Ej: Casa de verano" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">📍 Dirección completa:</label>
+                        <input type="text" class="form-control" placeholder="Calle, número, comuna" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">📌 Referencias:</label>
+                        <input type="text" class="form-control" placeholder="Puntos de referencia cercanos">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">🚪 Instrucciones de entrega:</label>
+                        <input type="text" class="form-control" placeholder="Instrucciones especiales para el repartidor">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">💾 Guardar Dirección</button>
+            </form>
+        </div>
+
+        <div class="section-card p-4 mb-4">
+            <h3>💳 Métodos de Pago (B-15)</h3>
+            
+            <div class="saved-item p-3 mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5>💳 Visa •••• 1234</h5>
+                        <p class="mb-0">📅 Vence: 12/25</p>
+                        <small class="text-success">✅ Predeterminada</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-light me-1" onclick="editCard('visa')">✏️ Editar</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteCard('visa')">🗑️ Eliminar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="saved-item p-3 mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5>💳 Mastercard •••• 5678</h5>
+                        <p class="mb-0">📅 Vence: 08/26</p>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-light me-1" onclick="editCard('mastercard')">✏️ Editar</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteCard('mastercard')">🗑️ Eliminar</button>
+                    </div>
+                </div>
+            </div>
+
+            <h5 class="mt-4">➕ Agregar Nueva Tarjeta</h5>
+            <form onsubmit="addNewCard(event)">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">🔢 Número de tarjeta:</label>
+                        <input type="text" class="form-control" placeholder="1234 5678 9012 3456" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">📅 Fecha vencimiento:</label>
+                        <input type="text" class="form-control" placeholder="MM/AA" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">🔒 CVV:</label>
+                        <input type="text" class="form-control" placeholder="123" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">👤 Nombre en la tarjeta:</label>
+                        <input type="text" class="form-control" placeholder="JUAN PEREZ" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">💳 Tipo de tarjeta:</label>
+                        <select class="form-control">
+                            <option>Visa</option>
+                            <option>Mastercard</option>
+                            <option>American Express</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">💾 Guardar Tarjeta</button>
+            </form>
+        </div>
+
+        <div class="section-card p-4">
+            <h3>📦 Historial de Pedidos (B-16)</h3>
+            <div class="list-group" id="orderHistory">
+                <!-- El historial se cargará dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cargar información del usuario (B-08)
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = JSON.parse(localStorage.getItem('doggyUser'));
+            
+            if (!user) {
+                alert('🔐 Debes iniciar sesión para ver tu cuenta');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Mostrar información del usuario
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('userEmailText').textContent = user.email;
+            document.getElementById('userId').textContent = user.id;
+            
+            // Formatear fecha de membresía
+            const memberDate = new Date(user.memberSince || Date.now());
+            document.getElementById('memberSince').textContent = memberDate.toLocaleDateString('es-CL', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            // Cargar historial de pedidos
+            loadOrderHistory();
+            
+            // Verificar si viene de un checkout exitoso
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('checkout') === 'success') {
+                alert('🎉 ¡Gracias por tu compra! Tu pedido está siendo procesado.');
+            }
+        });
+
+        function logout() {
+            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+                localStorage.removeItem('doggyUser');
+                alert('👋 Sesión cerrada correctamente');
+                window.location.href = 'login.html';
+            }
+        }
+
+        function editProfile() {
+            alert('✏️ Funcionalidad de edición de perfil en desarrollo...');
+        }
+
+        // Funciones para direcciones (B-15)
+        function editAddress(type) {
+            alert(`✏️ Editando dirección: ${type}`);
+        }
+
+        function deleteAddress(type) {
+            if (confirm(`¿Estás seguro de eliminar la dirección ${type}?`)) {
+                alert(`🗑️ Dirección ${type} eliminada`);
+            }
+        }
+
+        function addNewAddress(event) {
+            event.preventDefault();
+            alert('📍 Nueva dirección guardada exitosamente');
+        }
+
+        // Funciones para tarjetas (B-15)
+        function editCard(type) {
+            alert(`✏️ Editando tarjeta: ${type}`);
+        }
+
+        function deleteCard(type) {
+            if (confirm(`¿Estás seguro de eliminar la tarjeta ${type}?`)) {
+                alert(`🗑️ Tarjeta ${type} eliminada`);
+            }
+        }
+
+        function addNewCard(event) {
+            event.preventDefault();
+            alert('💳 Nueva tarjeta guardada exitosamente');
+        }
+
+        // Cargar historial de pedidos (B-16)
+        function loadOrderHistory() {
+            const orders = [
+                {
+                    id: 'DOG-2024-001',
+                    items: 'Completo Italiano x2, Hot Dog Tradicional x1',
+                    total: 7170,
+                    date: '2024-03-15',
+                    status: 'entregado',
+                    tracking: true
+                },
+                {
+                    id: 'DOG-2024-002',
+                    items: 'Completo Vegano x1',
+                    total: 3290,
+                    date: '2024-03-14',
+                    status: 'en_camino',
+                    tracking: true
+                },
+                {
+                    id: 'DOG-2024-003',
+                    items: 'Combo Especial x1, Hot Dog con Queso x2',
+                    total: 9570,
+                    date: '2024-03-10',
+                    status: 'entregado',
+                    tracking: false
+                }
+            ];
+
+            const orderHistory = document.getElementById('orderHistory');
+            
+            orderHistory.innerHTML = orders.map(order => {
+                const statusBadge = order.status === 'entregado' ? 'bg-success' : 
+                                  order.status === 'en_camino' ? 'bg-warning' : 'bg-secondary';
+                const statusText = order.status === 'entregado' ? 'Entregado' :
+                                 order.status === 'en_camino' ? 'En camino' : 'Procesando';
+                
+                const date = new Date(order.date).toLocaleDateString('es-CL');
+                
+                return `
+                    <div class="list-group-item list-group-item-action bg-dark text-white">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">📦 ${order.id}</h6>
+                                <p class="mb-1">${order.items}</p>
+                                <small>📅 ${date} - 💰 $${order.total.toLocaleString()}</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge ${statusBadge} order-badge mb-2">${statusText}</span>
+                                <br>
+                                ${order.tracking ? `<a href="rastreo.html" class="btn btn-sm btn-outline-primary">🚚 Rastrear</a>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+</html>
