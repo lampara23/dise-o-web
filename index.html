@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doggy's - Fortnite Hot Dogs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        body.light-mode {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .nav-custom {
+            background: rgba(11, 11, 25, 0.95) !important;
+            border-bottom: 2px solid #00f5ff;
+            padding: 15px 0;
+        }
+        
+        .light-mode .nav-custom {
+            background: rgba(26, 26, 46, 0.95) !important;
+            border-bottom: 2px solid #764ba2;
+        }
+        
+        .fortnite-hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), 
+                        url('PON_AQUI_TU_URL_DE_LA_IMAGEN') center/cover;
+            padding: 120px 0;
+            text-align: center;
+            border-bottom: 3px solid #ff4655;
+            position: relative;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .light-mode .fortnite-hero {
+            background: linear-gradient(rgba(102, 126, 234, 0.7), rgba(118, 75, 162, 0.8)), 
+                        url('https://static.wikia.nocookie.net/fortnite/images/1/15/The_Brat_-_Promo_-_Fortnite.jpg/revision/latest?cb=20210912170846') center/cover;
+        }
+        
+        .hero-content {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid #ff4655;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), 
+            url('https://static.wikia.nocookie.net/fortnite/images/1/15/The_Brat_-_Promo_-_Fortnite.jpg/revision/latest?cb=20210912170846') center/cover;
+        }
+        
+        .product-card {
+            background: rgba(30, 30, 50, 0.8);
+            border: 2px solid;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            height: 100%;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .light-mode .product-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 245, 255, 0.3);
+        }
+        
+        .light-mode .product-card:hover {
+            box-shadow: 0 10px 25px rgba(118, 75, 162, 0.3);
+        }
+        
+        .rarity-common {
+            border-color: #b0b0b0;
+            background: linear-gradient(135deg, rgba(30,30,50,0.9), rgba(80,80,80,0.3));
+        }
+        
+        .rarity-rare {
+            border-color: #0070dd;
+            background: linear-gradient(135deg, rgba(30,30,50,0.9), rgba(0,112,221,0.3));
+        }
+        
+        .rarity-epic {
+            border-color: #a335ee;
+            background: linear-gradient(135deg, rgba(30,30,50,0.9), rgba(163,53,238,0.3));
+        }
+        
+        .rarity-legendary {
+            border-color: #ff8000;
+            background: linear-gradient(135deg, rgba(30,30,50,0.9), rgba(255,128,0,0.3));
+        }
+        
+        .light-mode .rarity-common {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(176,176,176,0.2));
+        }
+        
+        .light-mode .rarity-rare {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(0,112,221,0.2));
+        }
+        
+        .light-mode .rarity-epic {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(163,53,238,0.2));
+        }
+        
+        .light-mode .rarity-legendary {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,128,0,0.2));
+        }
+        
+        .product-image {
+            height: 180px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+        }
+        
+        .limited-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff4655;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .cart-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            text-decoration: none;
+            background: #ff4655;
+            border: 2px solid #00f5ff;
+            transition: all 0.3s ease;
+        }
+        
+        .cart-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .light-mode .cart-btn {
+            border: 2px solid #764ba2;
+        }
+        
+        .section-title {
+            color: #00f5ff;
+            text-align: center;
+            margin: 40px 0 20px 0;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .light-mode .section-title {
+            color: #764ba2;
+        }
+        
+        .search-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .light-mode .search-container {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 10px;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #00f5ff;
+            color: white;
+            margin: 5px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .light-mode .filter-btn {
+            border: 1px solid #764ba2;
+        }
+        
+        .filter-btn.active {
+            background: #00f5ff;
+            color: #1a1a2e;
+            transform: scale(1.05);
+        }
+        
+        .light-mode .filter-btn.active {
+            background: #764ba2;
+            color: white;
+        }
+        
+        .filter-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #00f5ff;
+            color: white;
+            box-shadow: 0 0 0 0.2rem rgba(0, 245, 255, 0.25);
+        }
+        
+        .light-mode .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .light-mode .form-control:focus {
+            border-color: #764ba2;
+            box-shadow: 0 0 0 0.2rem rgba(118, 75, 162, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg nav-custom">
+        <div class="container">
+            <a class="navbar-brand text-white fw-bold" href="index.html">
+                🌭 DOGGY'S FORTNITE
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-white mx-2" href="index.html">Inicio</a>
+                <a class="nav-link text-white mx-2" href="carrito.html">Carrito</a>
+                <a class="nav-link text-white mx-2" href="login.html">Iniciar Sesión</a>
+                <a class="nav-link text-white mx-2" href="rastreo.html">Rastrear</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="fortnite-hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="display-3 fw-bold text-warning">¡VICTORY ROYALE HOT DOGS! 🏆</h1>
+                <p class="lead fs-4">Los completos más épicos del Fortnite</p>
+                <button class="btn btn-danger btn-lg mt-3" onclick="scrollToProducts()">Ver Productos</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Button -->
+    <a href="carrito.html" class="btn btn-danger cart-btn">
+        🛒
+    </a>
+
+    <div class="container mt-4">
+        <!-- Search Section -->
+        <div class="search-container">
+            <div class="row">
+                <div class="col-md-8">
+                    <input type="text" class="form-control form-control-lg" 
+                           id="searchInput" placeholder="🔍 Buscar completos, hot dogs y especiales...">
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-outline-light w-100" id="themeToggle">
+                        🌙 Modo Oscuro
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Filters -->
+        <div class="text-center mb-4">
+            <button class="filter-btn btn" data-filter="all">Todos</button>
+            <button class="filter-btn btn" data-filter="completos">🌭 Completos</button>
+            <button class="filter-btn btn" data-filter="hotdogs">🌭 Hot Dogs</button>
+            <button class="filter-btn btn" data-filter="especiales">🌟 Especiales</button>
+            <button class="filter-btn btn" data-filter="combos">🎮 Combos Fortnite</button>
+        </div>
+
+        <!-- Skeleton Loading -->
+        <div id="skeletonLoading" class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card product-card skeleton" style="height: 350px;"></div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card product-card skeleton" style="height: 350px;"></div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card product-card skeleton" style="height: 350px;"></div>
+            </div>
+        </div>
+
+        <h2 class="section-title" id="productsSection">🎯 NUESTROS PRODUCTOS</h2>
+        <div class="row" id="productsGrid">
+            <!-- Products will be loaded here -->
+        </div>
+
+        <!-- No Results Message -->
+        <div id="noResults" class="text-center py-5" style="display: none;">
+            <h3>🔍 No se encontraron productos</h3>
+            <p>Intenta con otros términos de búsqueda o filtros</p>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            { 
+                id: 1, 
+                name: "Completo Italiano", 
+                price: 2490, 
+                type: "completos", 
+                rarity: "common",
+                description: "Pan, vienesa, palta, tomate y mayonesa",
+                category: "completos"
+            },
+            { 
+                id: 2, 
+                name: "Completo Dinámico", 
+                price: 2290, 
+                type: "completos", 
+                rarity: "common",
+                description: "Pan, vienesa, chucrut, mostaza y ketchup",
+                category: "completos"
+            },
+            { 
+                id: 3, 
+                name: "Completo A lo Pobre", 
+                price: 4290, 
+                type: "completos", 
+                rarity: "rare",
+                description: "Vienesa, huevo frito, cebolla caramelizada, papas fritas",
+                category: "completos"
+            },
+            { 
+                id: 4, 
+                name: "Completo Luco", 
+                price: 3490, 
+                type: "completos", 
+                rarity: "rare",
+                description: "Vienesa, queso derretido, tomate",
+                category: "completos"
+            },
+            
+            { 
+                id: 5, 
+                name: "Hot Dog Tradicional", 
+                price: 2190, 
+                type: "hotdogs", 
+                rarity: "common",
+                description: "Pan hot dog, vienesa, mostaza, ketchup, pepinillos",
+                category: "hotdogs"
+            },
+            { 
+                id: 6, 
+                name: "Hot Dog con Queso", 
+                price: 2690, 
+                type: "hotdogs", 
+                rarity: "common",
+                description: "Pan hot dog, vienesa, queso cheddar derretido",
+                category: "hotdogs"
+            },
+            { 
+                id: 7, 
+                name: "Hot Dog Bacon", 
+                price: 3190, 
+                type: "hotdogs", 
+                rarity: "rare",
+                description: "Pan hot dog, vienesa, bacon crocante, salsa BBQ",
+                category: "hotdogs"
+            },
+            { 
+                id: 8, 
+                name: "Hot Dog Gigante", 
+                price: 4590, 
+                type: "hotdogs", 
+                rarity: "epic",
+                description: "Pan extra grande, doble vienesa, mayonesa, mostaza y ketchup",
+                category: "hotdogs"
+            },
+            
+            // ESPECIALES (Productos únicos)
+            { 
+                id: 9, 
+                name: "Hot Dog Vegano 🌱", 
+                price: 3290, 
+                type: "especiales", 
+                rarity: "rare",
+                description: "Salchicha vegetal, palta, tomate, salsa vegana",
+                category: "especiales"
+            },
+            { 
+                id: 10, 
+                name: "Completo Picante 🌶️", 
+                price: 2890, 
+                type: "especiales", 
+                rarity: "rare",
+                description: "Vienesa, ají verde, salsa picante, cebolla crispy, jalapeños",
+                category: "especiales"
+            },
+            { 
+                id: 11, 
+                name: "Completo Dulce 🍌", 
+                price: 3790, 
+                type: "especiales", 
+                rarity: "epic",
+                description: "Pan dulce, plátano, manjar, helado de vainilla, chips",
+                category: "especiales"
+            },
+            { 
+                id: 12, 
+                name: "Completo As Italiano 🎯", 
+                price: 4890, 
+                type: "especiales", 
+                rarity: "legendary",
+                description: "Carne de vacuno picada, palta, tomate, mayonesa",
+                category: "especiales"
+            },
+            { 
+                id: 13, 
+                name: "Completo As A lo Pobre 🎯", 
+                price: 5490, 
+                type: "especiales", 
+                rarity: "legendary",
+                description: "Carne de vacuno picada, huevo frito, cebolla caramelizada",
+                category: "especiales"
+            },
+            { 
+                id: 14, 
+                name: "Hot Dog As Gigante 🎯", 
+                price: 5990, 
+                type: "especiales", 
+                rarity: "legendary",
+                description: "Carne de vacuno picada y mucho queso",
+                category: "especiales"
+            },
+            
+            // COMBOS FORTNITE (Precios premium)
+            { 
+                id: 15, 
+                name: "Combo Victory Royale 🏆", 
+                price: 7990, 
+                type: "combos", 
+                rarity: "epic",
+                description: "2 Hot Dogs premium + papas fritas + bebida 500ml",
+                category: "combos"
+            },
+            { 
+                id: 16, 
+                name: "Combo Battle Bus 🚌", 
+                price: 5890, 
+                type: "combos", 
+                rarity: "rare",
+                description: "Hot Dog + papas pequeñas + bebida 350ml",
+                category: "combos"
+            },
+            { 
+                id: 17, 
+                name: "Combo Llama Legendaria 🦙", 
+                price: 9990, 
+                type: "combos", 
+                rarity: "legendary",
+                description: "2 Hot Dogs comunes a elección + papas grandes + 2 bebidas + postre",
+                category: "combos"
+            },
+            { 
+                id: 18, 
+                name: "Combo Storm King 👑", 
+                price: 8890, 
+                type: "combos", 
+                rarity: "epic",
+                description: "Hot Dog picante + papas storm + bebida energética + aros de cebolla",
+                category: "combos",
+                limited: true
+            }
+        ];
+
+        // Simulate loading
+        setTimeout(loadProducts, 1500);
+
+        function loadProducts() {
+            document.getElementById('skeletonLoading').style.display = 'none';
+            
+            const productsGrid = document.getElementById('productsGrid');
+            productsGrid.innerHTML = products.map(product => createProductCard(product)).join('');
+            
+            setupFilters();
+        }
+
+        function createProductCard(product) {
+            const rarityClass = `rarity-${product.rarity}`;
+            const limitedBadge = product.limited ? '<span class="limited-badge">⏰ LIMITED</span>' : '';
+            
+            return `
+                <div class="col-md-4 mb-4 product-item" data-type="${product.type}" data-category="${product.category}" data-name="${product.name.toLowerCase()}">
+                    <div class="card product-card text-white ${rarityClass}">
+                        <div class="product-image">
+                            🌭
+                            ${limitedBadge}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="card-text">${product.description}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="h4 text-warning">$${product.price.toLocaleString('es-CL')}</span>
+                                <button class="btn btn-primary">Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function setupFilters() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const searchInput = document.getElementById('searchInput');
+            
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const filter = this.dataset.filter;
+                    filterProducts(filter, searchInput.value.toLowerCase());
+                });
+            });
+            
+            searchInput.addEventListener('input', function() {
+                const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+                filterProducts(activeFilter, this.value.toLowerCase());
+            });
+            
+            // Set default filter
+            document.querySelector('[data-filter="all"]').classList.add('active');
+        }
+
+        function filterProducts(filter, searchTerm) {
+            const productItems = document.querySelectorAll('.product-item');
+            let visibleCount = 0;
+            
+            productItems.forEach(item => {
+                const productName = item.dataset.name;
+                const productCategory = item.dataset.category;
+                
+                const matchesSearch = productName.includes(searchTerm);
+                const matchesFilter = filter === 'all' || filter === productCategory;
+                
+                if (matchesSearch && matchesFilter) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Show/hide no results message
+            const noResults = document.getElementById('noResults');
+            noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        function scrollToProducts() {
+            document.getElementById('productsSection').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Dark mode toggle
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('light-mode');
+            this.textContent = document.body.classList.contains('light-mode') ? '🌙 Modo Oscuro' : '☀️ Modo Claro';
+        });
+    </script>
+</body>
+</html>
