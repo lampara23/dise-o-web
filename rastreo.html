@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rastrear Pedido - Doggy's</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .nav-custom {
+            background: rgba(26, 26, 46, 0.95) !important;
+        }
+        .tracking-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+        }
+        .step {
+            text-align: center;
+            padding: 10px;
+        }
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 5px;
+        }
+        .step-active {
+            background: #00d4ff;
+            animation: pulse 1.5s infinite;
+        }
+        .step-completed {
+            background: #4CAF50;
+        }
+        .chat-box {
+            height: 200px;
+            overflow-y: auto;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 10px;
+        }
+        .message {
+            margin: 5px 0;
+            padding: 8px 12px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+        .message-driver {
+            background: rgba(0, 212, 255, 0.3);
+            align-self: flex-start;
+        }
+        .message-user {
+            background: rgba(255, 255, 255, 0.2);
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg nav-custom">
+        <div class="container">
+            <a class="navbar-brand text-white fw-bold" href="index.html">🌭 Doggy's</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-white mx-2" href="index.html">Inicio</a>
+                <a class="nav-link text-white mx-2" href="carrito.html">Carrito</a>
+                <a class="nav-link text-white mx-2" href="login.html">Iniciar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Información del pedido -->
+        <div class="tracking-card p-4 mb-4">
+            <h2 class="text-center">🚚 Pedido #DOG-2024-001</h2>
+            <div class="row text-center mt-3">
+                <div class="col-md-3">
+                    <strong>Estado:</strong>
+                    <p id="status" class="mb-0">En camino</p>
+                </div>
+                <div class="col-md-3">
+                    <strong>Repartidor:</strong>
+                    <p class="mb-0">Juan Pérez</p>
+                </div>
+                <div class="col-md-3">
+                    <strong>Tiempo estimado:</strong>
+                    <p id="eta" class="mb-0">15 min</p>
+                </div>
+                <div class="col-md-3">
+                    <strong>Total:</strong>
+                    <p class="mb-0">$8.500</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progreso del pedido -->
+        <div class="tracking-card p-4 mb-4">
+            <h4 class="text-center mb-3">📊 Progreso del Pedido</h4>
+            <div class="row">
+                <div class="col-3 step">
+                    <div class="step-circle step-completed">✓</div>
+                    <div>Confirmado</div>
+                </div>
+                <div class="col-3 step">
+                    <div class="step-circle step-completed">✓</div>
+                    <div>Preparando</div>
+                </div>
+                <div class="col-3 step">
+                    <div class="step-circle step-active">🚗</div>
+                    <div>En camino</div>
+                </div>
+                <div class="col-3 step">
+                    <div class="step-circle">○</div>
+                    <div>Entregado</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat con repartidor -->
+        <div class="tracking-card p-4">
+            <h4 class="text-center mb-3">💬 Chat con el Repartidor</h4>
+            <div class="chat-box mb-3" id="chatBox">
+                <div class="message message-driver">
+                    <strong>Juan:</strong> ¡Hola! Tu pedido está en camino
+                </div>
+                <div class="message message-user">
+                    <strong>Tú:</strong> ¡Gracias! ¿Llegarás pronto?
+                </div>
+                <div class="message message-driver">
+                    <strong>Juan:</strong> Sí, en 15 minutos aproximadamente
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" id="messageInput" placeholder="Escribe tu mensaje...">
+                <button class="btn btn-primary" onclick="sendMessage()">Enviar</button>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="index.html" class="btn btn-outline-light">Volver al Inicio</a>
+        </div>
+    </div>
+
+    <script>
+        let timeLeft = 15;
+        let statusIndex = 0;
+        const statuses = ['Preparando', 'En camino', 'Cerca de ti', 'Entregado'];
+        const etas = ['20 min', '15 min', '5 min', '0 min'];
+
+        function updateTracking() {
+            timeLeft--;
+            
+            if (timeLeft <= 0) {
+                statusIndex = 3;
+                document.getElementById('status').textContent = 'Entregado ✅';
+                document.getElementById('eta').textContent = '0 min';
+                completeOrder();
+                return;
+            }
+            
+            if (timeLeft === 10) statusIndex = 1;
+            if (timeLeft === 5) statusIndex = 2;
+            
+            document.getElementById('status').textContent = statuses[statusIndex];
+            document.getElementById('eta').textContent = etas[statusIndex];
+        }
+
+        function completeOrder() {
+            document.querySelectorAll('.step-circle')[3].classList.add('step-completed');
+            document.querySelector('.step-active').classList.remove('step-active');
+            alert('🎉 ¡Pedido entregado! ¡Disfruta tu comida!');
+            clearInterval(timer);
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatBox = document.getElementById('chatBox');
+                chatBox.innerHTML += `
+                    <div class="message message-user">
+                        <strong>Tú:</strong> ${message}
+                    </div>
+                `;
+                input.value = '';
+                chatBox.scrollTop = chatBox.scrollHeight;
+                
+                // Respuesta automática del repartidor
+                setTimeout(() => {
+                    const responses = [
+                        "¡Claro! Llego en " + timeLeft + " minutos",
+                        "Sí, todo en orden 👍",
+                        "Perfecto, gracias",
+                        "¡Entendido!"
+                    ];
+                    const response = responses[Math.floor(Math.random() * responses.length)];
+                    chatBox.innerHTML += `
+                        <div class="message message-driver">
+                            <strong>Juan:</strong> ${response}
+                        </div>
+                    `;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }, 2000);
+            }
+        }
+
+        // Permitir enviar con Enter
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Actualizar cada minuto
+        const timer = setInterval(updateTracking, 60000);
+    </script>
+</body>
+</html>
