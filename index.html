@@ -33,7 +33,7 @@
         
         .fortnite-hero {
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), 
-                        url('PON_AQUI_TU_URL_DE_LA_IMAGEN') center/cover;
+                        url('https://static.wikia.nocookie.net/fortnite/images/1/15/The_Brat_-_Promo_-_Fortnite.jpg/revision/latest?cb=20210912170846') center/cover;
             padding: 120px 0;
             text-align: center;
             border-bottom: 3px solid #ff4655;
@@ -53,8 +53,6 @@
             padding: 40px;
             border-radius: 15px;
             border: 2px solid #ff4655;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), 
-            url('https://static.wikia.nocookie.net/fortnite/images/1/15/The_Brat_-_Promo_-_Fortnite.jpg/revision/latest?cb=20210912170846') center/cover;
         }
         
         .product-card {
@@ -264,9 +262,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg nav-custom">
         <div class="container">
-            <a class="navbar-brand text-white fw-bold" href="index.html">
-                🌭 DOGGY'S FORTNITE
-            </a>
+            <a class="navbar-brand text-white fw-bold" href="index.html">🌭 DOGGY'S FORTNITE</a>
             <div class="navbar-nav ms-auto">
                 <a class="nav-link text-white mx-2" href="index.html">Inicio</a>
                 <a class="nav-link text-white mx-2" href="carrito.html">Carrito</a>
@@ -290,6 +286,7 @@
     <!-- Cart Button -->
     <a href="carrito.html" class="btn btn-danger cart-btn">
         🛒
+        <span class="cart-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">0</span>
     </a>
 
     <div class="container mt-4">
@@ -343,206 +340,64 @@
     </div>
 
     <script>
-        const products = [
-            { 
-                id: 1, 
-                name: "Completo Italiano", 
-                price: 2490, 
-                type: "completos", 
-                rarity: "common",
-                description: "Pan, vienesa, palta, tomate y mayonesa",
-                category: "completos"
-            },
-            { 
-                id: 2, 
-                name: "Completo Dinámico", 
-                price: 2290, 
-                type: "completos", 
-                rarity: "common",
-                description: "Pan, vienesa, chucrut, mostaza y ketchup",
-                category: "completos"
-            },
-            { 
-                id: 3, 
-                name: "Completo A lo Pobre", 
-                price: 4290, 
-                type: "completos", 
-                rarity: "rare",
-                description: "Vienesa, huevo frito, cebolla caramelizada, papas fritas",
-                category: "completos"
-            },
-            { 
-                id: 4, 
-                name: "Completo Luco", 
-                price: 3490, 
-                type: "completos", 
-                rarity: "rare",
-                description: "Vienesa, queso derretido, tomate",
-                category: "completos"
-            },
-            
-            { 
-                id: 5, 
-                name: "Hot Dog Tradicional", 
-                price: 2190, 
-                type: "hotdogs", 
-                rarity: "common",
-                description: "Pan hot dog, vienesa, mostaza, ketchup, pepinillos",
-                category: "hotdogs"
-            },
-            { 
-                id: 6, 
-                name: "Hot Dog con Queso", 
-                price: 2690, 
-                type: "hotdogs", 
-                rarity: "common",
-                description: "Pan hot dog, vienesa, queso cheddar derretido",
-                category: "hotdogs"
-            },
-            { 
-                id: 7, 
-                name: "Hot Dog Bacon", 
-                price: 3190, 
-                type: "hotdogs", 
-                rarity: "rare",
-                description: "Pan hot dog, vienesa, bacon crocante, salsa BBQ",
-                category: "hotdogs"
-            },
-            { 
-                id: 8, 
-                name: "Hot Dog Gigante", 
-                price: 4590, 
-                type: "hotdogs", 
-                rarity: "epic",
-                description: "Pan extra grande, doble vienesa, mayonesa, mostaza y ketchup",
-                category: "hotdogs"
-            },
-            
-            // ESPECIALES (Productos únicos)
-            { 
-                id: 9, 
-                name: "Hot Dog Vegano 🌱", 
-                price: 3290, 
-                type: "especiales", 
-                rarity: "rare",
-                description: "Salchicha vegetal, palta, tomate, salsa vegana",
-                category: "especiales"
-            },
-            { 
-                id: 10, 
-                name: "Completo Picante 🌶️", 
-                price: 2890, 
-                type: "especiales", 
-                rarity: "rare",
-                description: "Vienesa, ají verde, salsa picante, cebolla crispy, jalapeños",
-                category: "especiales"
-            },
-            { 
-                id: 11, 
-                name: "Completo Dulce 🍌", 
-                price: 3790, 
-                type: "especiales", 
-                rarity: "epic",
-                description: "Pan dulce, plátano, manjar, helado de vainilla, chips",
-                category: "especiales"
-            },
-            { 
-                id: 12, 
-                name: "Completo As Italiano 🎯", 
-                price: 4890, 
-                type: "especiales", 
-                rarity: "legendary",
-                description: "Carne de vacuno picada, palta, tomate, mayonesa",
-                category: "especiales"
-            },
-            { 
-                id: 13, 
-                name: "Completo As A lo Pobre 🎯", 
-                price: 5490, 
-                type: "especiales", 
-                rarity: "legendary",
-                description: "Carne de vacuno picada, huevo frito, cebolla caramelizada",
-                category: "especiales"
-            },
-            { 
-                id: 14, 
-                name: "Hot Dog As Gigante 🎯", 
-                price: 5990, 
-                type: "especiales", 
-                rarity: "legendary",
-                description: "Carne de vacuno picada y mucho queso",
-                category: "especiales"
-            },
-            
-            // COMBOS FORTNITE (Precios premium)
-            { 
-                id: 15, 
-                name: "Combo Victory Royale 🏆", 
-                price: 7990, 
-                type: "combos", 
-                rarity: "epic",
-                description: "2 Hot Dogs premium + papas fritas + bebida 500ml",
-                category: "combos"
-            },
-            { 
-                id: 16, 
-                name: "Combo Battle Bus 🚌", 
-                price: 5890, 
-                type: "combos", 
-                rarity: "rare",
-                description: "Hot Dog + papas pequeñas + bebida 350ml",
-                category: "combos"
-            },
-            { 
-                id: 17, 
-                name: "Combo Llama Legendaria 🦙", 
-                price: 9990, 
-                type: "combos", 
-                rarity: "legendary",
-                description: "2 Hot Dogs comunes a elección + papas grandes + 2 bebidas + postre",
-                category: "combos"
-            },
-            { 
-                id: 18, 
-                name: "Combo Storm King 👑", 
-                price: 8890, 
-                type: "combos", 
-                rarity: "epic",
-                description: "Hot Dog picante + papas storm + bebida energética + aros de cebolla",
-                category: "combos",
-                limited: true
+        let products = [];
+
+        // Cargar productos desde la API
+        async function loadProducts() {
+            try {
+                const response = await fetch('http://localhost:8000/api/products');
+                products = await response.json();
+                displayProducts(products);
+            } catch (error) {
+                console.error('Error cargando productos:', error);
+                // Fallback a productos locales si la API falla
+                loadLocalProducts();
             }
-        ];
+        }
 
-        // Simulate loading
-        setTimeout(loadProducts, 1500);
-
-        function loadProducts() {
+        function displayProducts(productsToDisplay) {
             document.getElementById('skeletonLoading').style.display = 'none';
             
             const productsGrid = document.getElementById('productsGrid');
-            productsGrid.innerHTML = products.map(product => createProductCard(product)).join('');
             
+            if (productsToDisplay.length === 0) {
+                document.getElementById('noResults').style.display = 'block';
+                productsGrid.innerHTML = '';
+                return;
+            }
+            
+            document.getElementById('noResults').style.display = 'none';
+            productsGrid.innerHTML = productsToDisplay.map(product => createProductCard(product)).join('');
             setupFilters();
         }
 
         function createProductCard(product) {
             const rarityClass = `rarity-${product.rarity}`;
             const limitedBadge = product.limited ? '<span class="limited-badge">⏰ LIMITED</span>' : '';
+            const outOfStock = product.stock === 0 ? 'opacity-50' : '';
             
             return `
-                <div class="col-md-4 mb-4 product-item" data-type="${product.type}" data-category="${product.category}" data-name="${product.name.toLowerCase()}">
+                <div class="col-md-4 mb-4 product-item ${outOfStock}" data-type="${product.type}" data-category="${product.category}" data-name="${product.name.toLowerCase()}">
                     <div class="card product-card text-white ${rarityClass}">
                         <div class="product-image">
-                            🌭
+                            ${product.image || '🌭'}
                             ${limitedBadge}
+                            ${product.stock === 0 ? '<span class="limited-badge bg-danger">AGOTADO</span>' : ''}
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">${product.name}</h5>
                             <p class="card-text">${product.description}</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="h4 text-warning">$${product.price.toLocaleString('es-CL')}</span>
-                                <button class="btn btn-primary">Agregar</button>
+                                <div>
+                                    <span class="h4 text-warning">$${product.price.toLocaleString('es-CL')}</span>
+                                    <br>
+                                    <small class="text-info">Stock: ${product.stock}</small>
+                                </div>
+                                <button class="btn btn-primary ${product.stock === 0 ? 'disabled' : ''}" 
+                                        onclick="addToCart('${product._id}')"
+                                        ${product.stock === 0 ? 'disabled' : ''}>
+                                    ${product.stock === 0 ? 'Agotado' : 'Agregar'}
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -550,15 +405,63 @@
             `;
         }
 
+        // Función para agregar al carrito
+        async function addToCart(productId) {
+            const product = products.find(p => p._id === productId);
+            if (!product) return;
+
+            let cart = JSON.parse(localStorage.getItem('doggyCart')) || [];
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                if (existingItem.quantity >= 10) {
+                    alert('❌ Máximo 10 unidades por producto');
+                    return;
+                }
+                if (existingItem.quantity >= product.stock) {
+                    alert('❌ No hay suficiente stock disponible');
+                    return;
+                }
+                existingItem.quantity += 1;
+            } else {
+                if (product.stock < 1) {
+                    alert('❌ Producto agotado');
+                    return;
+                }
+                cart.push({
+                    id: product._id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1,
+                    rarity: product.rarity,
+                    stock: product.stock
+                });
+            }
+            
+            localStorage.setItem('doggyCart', JSON.stringify(cart));
+            alert(`✅ ${product.name} agregado al carrito`);
+            updateCartCounter();
+        }
+
+        function updateCartCounter() {
+            const cart = JSON.parse(localStorage.getItem('doggyCart')) || [];
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            const badge = document.querySelector('.cart-badge');
+            if (badge) {
+                badge.textContent = cartCount;
+                badge.style.display = cartCount > 0 ? 'block' : 'none';
+            }
+        }
+
+        // Sistema de filtros
         function setupFilters() {
             const filterBtns = document.querySelectorAll('.filter-btn');
             const searchInput = document.getElementById('searchInput');
             
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    // Remove active class from all buttons
                     filterBtns.forEach(b => b.classList.remove('active'));
-                    // Add active class to clicked button
                     this.classList.add('active');
                     
                     const filter = this.dataset.filter;
@@ -571,7 +474,6 @@
                 filterProducts(activeFilter, this.value.toLowerCase());
             });
             
-            // Set default filter
             document.querySelector('[data-filter="all"]').classList.add('active');
         }
 
@@ -594,7 +496,6 @@
                 }
             });
             
-            // Show/hide no results message
             const noResults = document.getElementById('noResults');
             noResults.style.display = visibleCount === 0 ? 'block' : 'none';
         }
@@ -605,10 +506,34 @@
             });
         }
 
-        // Dark mode toggle
+        // Modo oscuro/claro
         document.getElementById('themeToggle').addEventListener('click', function() {
             document.body.classList.toggle('light-mode');
             this.textContent = document.body.classList.contains('light-mode') ? '🌙 Modo Oscuro' : '☀️ Modo Claro';
+        });
+
+        // Función fallback si la API no está disponible
+        function loadLocalProducts() {
+            const localProducts = [
+                {
+                    _id: '1',
+                    name: "Completo Italiano",
+                    price: 2490,
+                    stock: 50,
+                    description: "Pan, vienesa, palta, tomate y mayonesa",
+                    category: "completos",
+                    rarity: "common",
+                    image: "🌭",
+                    type: "completos"
+                }
+            ];
+            displayProducts(localProducts);
+        }
+
+        // Cargar productos al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(loadProducts, 1000);
+            updateCartCounter();
         });
     </script>
 </body>

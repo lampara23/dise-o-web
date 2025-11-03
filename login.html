@@ -40,6 +40,28 @@
             text-align: center;
             font-size: 0.9rem;
         }
+
+        .divider {
+            position: relative;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .divider span {
+            background: #667eea;
+            padding: 0 15px;
+            position: relative;
+        }
     </style>
 </head>
 <body>
@@ -68,8 +90,8 @@
                         <button type="submit" class="btn btn-primary w-100 mb-3">Ingresar</button>
                     </form>
                     
-                    <div class="text-center my-3">
-                        <span class="bg-dark px-2">o</span>
+                    <div class="divider">
+                        <span>o</span>
                     </div>
                     
                     <form id="registerForm">
@@ -102,7 +124,7 @@
                         
                         <div class="mb-3">
                             <label class="form-label">Confirmar contraseña:</label>
-                            <input type="password" class="form-control" placeholder="••••••••" required>
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="••••••••" required>
                         </div>
                         
                         <button type="submit" class="btn btn-success w-100" id="registerBtn" disabled>Crear Cuenta</button>
@@ -141,7 +163,7 @@
         });
         
         // Login de usuario
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = this.querySelector('input[type="email"]').value;
             const password = this.querySelector('input[type="password"]').value;
@@ -154,46 +176,30 @@
             
             // Si es el administrador, redirigir al panel de administración
             if (email === 'admin@doggys.cl') {
-                // Crear objeto de usuario administrador
                 const adminUser = {
                     id: 'ADMIN001',
                     name: 'Administrador Doggy\'s',
                     email: 'admin@doggys.cl',
-                    memberSince: new Date().toISOString(),
-                    isAdmin: true
+                    role: 'admin',
+                    memberSince: new Date().toISOString()
                 };
                 localStorage.setItem('doggyUser', JSON.stringify(adminUser));
                 alert('👨‍💼 ¡Bienvenido Administrador!');
                 window.location.href = 'admin.html';
             } else {
-                // Para usuarios normales, verificar credenciales
-                const users = JSON.parse(localStorage.getItem('doggyUsers')) || [];
-                const user = users.find(u => u.email === email);
+                // Para usuarios normales, simular login exitoso
+                const user = {
+                    id: 'USR' + Date.now(),
+                    name: email.split('@')[0],
+                    email: email,
+                    role: 'user',
+                    memberSince: new Date().toISOString(),
+                    ordersCount: 0
+                };
                 
-                if (user) {
-                    // Usuario existe, guardar sesión
-                    localStorage.setItem('doggyUser', JSON.stringify(user));
-                    alert(`✅ ¡Bienvenido de vuelta ${user.name}!`);
-                    window.location.href = 'cuenta.html';
-                } else {
-                    // Usuario no existe, crear cuenta automáticamente
-                    const newUser = {
-                        id: 'USR' + Date.now(),
-                        name: email.split('@')[0], // Nombre basado en email
-                        email: email,
-                        memberSince: new Date().toISOString(),
-                        orders: 0,
-                        isAdmin: false
-                    };
-                    
-                    // Guardar usuario
-                    users.push(newUser);
-                    localStorage.setItem('doggyUsers', JSON.stringify(users));
-                    localStorage.setItem('doggyUser', JSON.stringify(newUser));
-                    
-                    alert(`🎉 ¡Bienvenido a Doggy's! Tu cuenta ha sido creada automáticamente.`);
-                    window.location.href = 'cuenta.html';
-                }
+                localStorage.setItem('doggyUser', JSON.stringify(user));
+                alert(`✅ ¡Bienvenido ${user.name}!`);
+                window.location.href = 'cuenta.html';
             }
         });
         
@@ -204,7 +210,7 @@
             const name = this.querySelector('input[type="text"]').value;
             const email = this.querySelector('input[type="email"]').value;
             const password = document.getElementById('password').value;
-            const confirmPassword = this.querySelectorAll('input[type="password"]')[1].value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
             
             // Validaciones
             if (password !== confirmPassword) {
@@ -212,16 +218,6 @@
                 return;
             }
             
-            // Verificar si el usuario ya existe
-            const users = JSON.parse(localStorage.getItem('doggyUsers')) || [];
-            const existingUser = users.find(u => u.email === email);
-            
-            if (existingUser) {
-                alert('❌ Este email ya está registrado. Por favor inicia sesión.');
-                return;
-            }
-            
-            // No permitir registro como administrador
             if (email === 'admin@doggys.cl') {
                 alert('❌ No puedes registrarte con el email de administrador');
                 return;
@@ -232,14 +228,12 @@
                 id: 'USR' + Date.now(),
                 name: name,
                 email: email,
+                role: 'user',
                 memberSince: new Date().toISOString(),
-                orders: 0,
-                isAdmin: false
+                ordersCount: 0
             };
             
             // Guardar usuario
-            users.push(newUser);
-            localStorage.setItem('doggyUsers', JSON.stringify(users));
             localStorage.setItem('doggyUser', JSON.stringify(newUser));
             
             alert(`🎉 ¡Cuenta creada exitosamente! Bienvenido a Doggy's, ${name}`);
