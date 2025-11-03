@@ -30,6 +30,16 @@
         .form-control::placeholder {
             color: rgba(255, 255, 255, 0.7);
         }
+        
+        .admin-notice {
+            background: rgba(255, 71, 87, 0.2);
+            border: 1px solid rgba(255, 71, 87, 0.5);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -38,6 +48,11 @@
             <div class="col-md-6">
                 <div class="login-container p-4">
                     <h1 class="text-center mb-4">🔐 Iniciar Sesión</h1>
+                    
+                    <!-- Notificación para administradores -->
+                    <div class="admin-notice">
+                        <strong>👨‍💼 Acceso Administrativo:</strong> Usa <code>admin@doggys.cl</code> para panel de administración
+                    </div>
                     
                     <form id="loginForm">
                         <div class="mb-3">
@@ -102,6 +117,7 @@
     </div>
 
     <script>
+        // Validación de contraseña en registro
         document.getElementById('password').addEventListener('input', function() {
             const password = this.value;
             const requirements = {
@@ -124,14 +140,120 @@
             document.getElementById('registerBtn').disabled = !allValid;
         });
         
+        // Login de usuario
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            window.location.href = 'cuenta.html';
+            const email = this.querySelector('input[type="email"]').value;
+            const password = this.querySelector('input[type="password"]').value;
+            
+            // Validación básica
+            if (!email || !password) {
+                alert('❌ Por favor completa todos los campos');
+                return;
+            }
+            
+            // Si es el administrador, redirigir al panel de administración
+            if (email === 'admin@doggys.cl') {
+                // Crear objeto de usuario administrador
+                const adminUser = {
+                    id: 'ADMIN001',
+                    name: 'Administrador Doggy\'s',
+                    email: 'admin@doggys.cl',
+                    memberSince: new Date().toISOString(),
+                    isAdmin: true
+                };
+                localStorage.setItem('doggyUser', JSON.stringify(adminUser));
+                alert('👨‍💼 ¡Bienvenido Administrador!');
+                window.location.href = 'admin.html';
+            } else {
+                // Para usuarios normales, verificar credenciales
+                const users = JSON.parse(localStorage.getItem('doggyUsers')) || [];
+                const user = users.find(u => u.email === email);
+                
+                if (user) {
+                    // Usuario existe, guardar sesión
+                    localStorage.setItem('doggyUser', JSON.stringify(user));
+                    alert(`✅ ¡Bienvenido de vuelta ${user.name}!`);
+                    window.location.href = 'cuenta.html';
+                } else {
+                    // Usuario no existe, crear cuenta automáticamente
+                    const newUser = {
+                        id: 'USR' + Date.now(),
+                        name: email.split('@')[0], // Nombre basado en email
+                        email: email,
+                        memberSince: new Date().toISOString(),
+                        orders: 0,
+                        isAdmin: false
+                    };
+                    
+                    // Guardar usuario
+                    users.push(newUser);
+                    localStorage.setItem('doggyUsers', JSON.stringify(users));
+                    localStorage.setItem('doggyUser', JSON.stringify(newUser));
+                    
+                    alert(`🎉 ¡Bienvenido a Doggy's! Tu cuenta ha sido creada automáticamente.`);
+                    window.location.href = 'cuenta.html';
+                }
+            }
         });
         
+        // Registro de nuevo usuario
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            const name = this.querySelector('input[type="text"]').value;
+            const email = this.querySelector('input[type="email"]').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.querySelectorAll('input[type="password"]')[1].value;
+            
+            // Validaciones
+            if (password !== confirmPassword) {
+                alert('❌ Las contraseñas no coinciden');
+                return;
+            }
+            
+            // Verificar si el usuario ya existe
+            const users = JSON.parse(localStorage.getItem('doggyUsers')) || [];
+            const existingUser = users.find(u => u.email === email);
+            
+            if (existingUser) {
+                alert('❌ Este email ya está registrado. Por favor inicia sesión.');
+                return;
+            }
+            
+            // No permitir registro como administrador
+            if (email === 'admin@doggys.cl') {
+                alert('❌ No puedes registrarte con el email de administrador');
+                return;
+            }
+            
+            // Crear nuevo usuario
+            const newUser = {
+                id: 'USR' + Date.now(),
+                name: name,
+                email: email,
+                memberSince: new Date().toISOString(),
+                orders: 0,
+                isAdmin: false
+            };
+            
+            // Guardar usuario
+            users.push(newUser);
+            localStorage.setItem('doggyUsers', JSON.stringify(users));
+            localStorage.setItem('doggyUser', JSON.stringify(newUser));
+            
+            alert(`🎉 ¡Cuenta creada exitosamente! Bienvenido a Doggy's, ${name}`);
             window.location.href = 'cuenta.html';
+        });
+
+        // Prevenir que se registre como administrador
+        document.querySelectorAll('input[type="email"]').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value === 'admin@doggys.cl' && this.closest('#registerForm')) {
+                    alert('⚠️ Este email está reservado para administración');
+                    this.value = '';
+                }
+            });
         });
     </script>
 </body>

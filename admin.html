@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Doggy's</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .nav-custom {
+            background: rgba(11, 11, 25, 0.95) !important;
+            border-bottom: 2px solid #00f5ff;
+        }
+        
+        .admin-card {
+            background: rgba(30, 30, 50, 0.8);
+            border: 2px solid #00f5ff;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .section-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+        }
+        
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+        
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #00f5ff;
+            color: white;
+            box-shadow: 0 0 0 0.2rem rgba(0, 245, 255, 0.25);
+        }
+        
+        .table-dark {
+            background: rgba(30, 30, 50, 0.8);
+        }
+        
+        .admin-badge {
+            background: #ff4655;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .rarity-common { border-left: 4px solid #b0b0b0; }
+        .rarity-rare { border-left: 4px solid #0070dd; }
+        .rarity-epic { border-left: 4px solid #a335ee; }
+        .rarity-legendary { border-left: 4px solid #ff8000; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg nav-custom">
+        <div class="container">
+            <a class="navbar-brand text-white fw-bold" href="index.html">🌭 DOGGY'S ADMIN</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-white mx-2" href="index.html">Inicio</a>
+                <a class="nav-link text-white mx-2" href="cuenta.html">Mi Cuenta</a>
+                <a class="nav-link text-white mx-2" onclick="logout()">Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">🛠️ Panel de Administración</h1>
+        
+        <!-- Resumen General -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="admin-card p-3 text-center">
+                    <h3 id="totalProducts">0</h3>
+                    <p>Productos</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="admin-card p-3 text-center">
+                    <h3 id="totalUsers">0</h3>
+                    <p>Usuarios</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="admin-card p-3 text-center">
+                    <h3 id="totalOrders">0</h3>
+                    <p>Pedidos</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="admin-card p-3 text-center">
+                    <h3 id="totalRevenue">$0</h3>
+                    <p>Ingresos</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gestión de Productos -->
+        <div class="section-card p-4 mb-4">
+            <h3>📦 Gestión de Productos</h3>
+            
+            <!-- Formulario para agregar/editar producto -->
+            <div class="mb-4">
+                <h5 id="formTitle">➕ Agregar Nuevo Producto</h5>
+                <form id="productForm" onsubmit="saveProduct(event)">
+                    <input type="hidden" id="productId">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nombre del producto:</label>
+                            <input type="text" class="form-control" id="productName" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Precio:</label>
+                            <input type="number" class="form-control" id="productPrice" min="0" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Stock:</label>
+                            <input type="number" class="form-control" id="productStock" min="0" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Descripción:</label>
+                            <textarea class="form-control" id="productDescription" rows="2" required></textarea>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Categoría:</label>
+                            <select class="form-control" id="productCategory" required>
+                                <option value="completos">Completos</option>
+                                <option value="hotdogs">Hot Dogs</option>
+                                <option value="especiales">Especiales</option>
+                                <option value="combos">Combos</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Rareza:</label>
+                            <select class="form-control" id="productRarity" required>
+                                <option value="common">Común</option>
+                                <option value="rare">Raro</option>
+                                <option value="epic">Épico</option>
+                                <option value="legendary">Legendario</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="productLimited">
+                                <label class="form-check-label" for="productLimited">
+                                    Producto Limitado
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary me-2" id="saveBtn">💾 Guardar Producto</button>
+                    <button type="button" class="btn btn-secondary" id="cancelBtn" style="display:none;" onclick="cancelEdit()">❌ Cancelar</button>
+                </form>
+            </div>
+            
+            <!-- Lista de productos -->
+            <h5>📋 Lista de Productos</h5>
+            <div class="table-responsive">
+                <table class="table table-dark table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Categoría</th>
+                            <th>Rareza</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTable">
+                        <!-- Los productos se cargarán aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Gestión de Usuarios -->
+        <div class="section-card p-4">
+            <h3>👥 Usuarios Registrados</h3>
+            <div class="table-responsive">
+                <table class="table table-dark table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Fecha Registro</th>
+                            <th>Pedidos</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable">
+                        <!-- Los usuarios se cargarán aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar si es administrador
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = JSON.parse(localStorage.getItem('doggyUser'));
+            
+            if (!user || user.email !== 'admin@doggys.cl') {
+                alert('🔐 Acceso denegado. No tienes permisos de administrador.');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Cargar datos
+            loadProducts();
+            loadUsers();
+            updateDashboard();
+        });
+
+        // Cargar productos
+        function loadProducts() {
+            let products = JSON.parse(localStorage.getItem('doggyProducts'));
+            
+            // Si no hay productos, inicializar con los productos por defecto
+            if (!products) {
+                products = [
+                    { id: 1, name: "Completo Italiano", price: 2490, stock: 50, type: "completos", rarity: "common", description: "Pan, vienesa, palta, tomate y mayonesa", category: "completos" },
+                    { id: 2, name: "Completo Dinámico", price: 2290, stock: 45, type: "completos", rarity: "common", description: "Pan, vienesa, chucrut, mostaza y ketchup", category: "completos" },
+                    { id: 3, name: "Completo A lo Pobre", price: 4290, stock: 30, type: "completos", rarity: "rare", description: "Vienesa, huevo frito, cebolla caramelizada, papas fritas", category: "completos" },
+                    { id: 4, name: "Completo Luco", price: 3490, stock: 35, type: "completos", rarity: "rare", description: "Vienesa, queso derretido, tomate", category: "completos" },
+                    { id: 5, name: "Hot Dog Tradicional", price: 2190, stock: 60, type: "hotdogs", rarity: "common", description: "Pan hot dog, vienesa, mostaza, ketchup, pepinillos", category: "hotdogs" },
+                    { id: 6, name: "Hot Dog con Queso", price: 2690, stock: 55, type: "hotdogs", rarity: "common", description: "Pan hot dog, vienesa, queso cheddar derretido", category: "hotdogs" },
+                    { id: 7, name: "Hot Dog Bacon", price: 3190, stock: 40, type: "hotdogs", rarity: "rare", description: "Pan hot dog, vienesa, bacon crocante, salsa BBQ", category: "hotdogs" },
+                    { id: 8, name: "Hot Dog Gigante", price: 4590, stock: 25, type: "hotdogs", rarity: "epic", description: "Pan extra grande, doble vienesa, mayonesa, mostaza y ketchup", category: "hotdogs" },
+                    { id: 9, name: "Hot Dog Vegano 🌱", price: 3290, stock: 20, type: "especiales", rarity: "rare", description: "Salchicha vegetal, palta, tomate, salsa vegana", category: "especiales" },
+                    { id: 10, name: "Completo Picante 🌶️", price: 2890, stock: 35, type: "especiales", rarity: "rare", description: "Vienesa, ají verde, salsa picante, cebolla crispy, jalapeños", category: "especiales" },
+                    { id: 11, name: "Completo Dulce 🍌", price: 3790, stock: 15, type: "especiales", rarity: "epic", description: "Pan dulce, plátano, manjar, helado de vainilla, chips", category: "especiales" },
+                    { id: 12, name: "Completo As Italiano 🎯", price: 4890, stock: 20, type: "especiales", rarity: "legendary", description: "Carne de vacuno picada, palta, tomate, mayonesa", category: "especiales" },
+                    { id: 13, name: "Completo As A lo Pobre 🎯", price: 5490, stock: 18, type: "especiales", rarity: "legendary", description: "Carne de vacuno picada, huevo frito, cebolla caramelizada", category: "especiales" },
+                    { id: 14, name: "Hot Dog As Gigante 🎯", price: 5990, stock: 15, type: "especiales", rarity: "legendary", description: "Carne de vacuno picada y mucho queso", category: "especiales" },
+                    { id: 15, name: "Combo Victory Royale 🏆", price: 7990, stock: 25, type: "combos", rarity: "epic", description: "2 Hot Dogs premium + papas fritas + bebida 500ml", category: "combos" },
+                    { id: 16, name: "Combo Battle Bus 🚌", price: 5890, stock: 30, type: "combos", rarity: "rare", description: "Hot Dog + papas pequeñas + bebida 350ml", category: "combos" },
+                    { id: 17, name: "Combo Llama Legendaria 🦙", price: 9990, stock: 10, type: "combos", rarity: "legendary", description: "2 Hot Dogs comunes a elección + papas grandes + 2 bebidas + postre", category: "combos" },
+                    { id: 18, name: "Combo Storm King 👑", price: 8890, stock: 12, type: "combos", rarity: "epic", description: "Hot Dog picante + papas storm + bebida energética + aros de cebolla", category: "combos", limited: true }
+                ];
+                localStorage.setItem('doggyProducts', JSON.stringify(products));
+            }
+            
+            // Mostrar productos en la tabla
+            const productsTable = document.getElementById('productsTable');
+            productsTable.innerHTML = products.map(product => `
+                <tr class="rarity-${product.rarity}">
+                    <td>${product.name}</td>
+                    <td>$${product.price.toLocaleString()}</td>
+                    <td>${product.stock}</td>
+                    <td>${product.category}</td>
+                    <td>
+                        <span class="badge ${getRarityBadgeClass(product.rarity)}">
+                            ${getRarityText(product.rarity)}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-warning me-1" onclick="editProduct(${product.id})">✏️ Editar</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteProduct(${product.id})">🗑️ Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Cargar usuarios
+        function loadUsers() {
+            let users = JSON.parse(localStorage.getItem('doggyUsers')) || [];
+            
+            // Si no hay usuarios, inicializar con algunos de ejemplo
+            if (users.length === 0) {
+                users = [
+                    { id: 'USR001', name: "Juan Pérez", email: "juan@example.com", memberSince: "2024-01-15", orders: 5 },
+                    { id: 'USR002', name: "María González", email: "maria@example.com", memberSince: "2024-02-20", orders: 3 },
+                    { id: 'USR003', name: "Carlos López", email: "carlos@example.com", memberSince: "2024-03-10", orders: 7 }
+                ];
+                localStorage.setItem('doggyUsers', JSON.stringify(users));
+            }
+            
+            // Mostrar usuarios en la tabla
+            const usersTable = document.getElementById('usersTable');
+            usersTable.innerHTML = users.map(user => `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${new Date(user.memberSince).toLocaleDateString('es-CL')}</td>
+                    <td>${user.orders}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Actualizar dashboard
+        function updateDashboard() {
+            const products = JSON.parse(localStorage.getItem('doggyProducts')) || [];
+            const users = JSON.parse(localStorage.getItem('doggyUsers')) || [];
+            const orders = JSON.parse(localStorage.getItem('doggyOrders')) || [];
+            
+            document.getElementById('totalProducts').textContent = products.length;
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('totalOrders').textContent = orders.length;
+            
+            const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+            document.getElementById('totalRevenue').textContent = `$${totalRevenue.toLocaleString()}`;
+        }
+
+        // Guardar producto (nuevo o editado)
+        function saveProduct(event) {
+            event.preventDefault();
+            
+            const products = JSON.parse(localStorage.getItem('doggyProducts'));
+            const productId = document.getElementById('productId').value;
+            const isEditing = productId !== '';
+            
+            const product = {
+                id: isEditing ? parseInt(productId) : Date.now(),
+                name: document.getElementById('productName').value,
+                price: parseInt(document.getElementById('productPrice').value),
+                stock: parseInt(document.getElementById('productStock').value),
+                description: document.getElementById('productDescription').value,
+                category: document.getElementById('productCategory').value,
+                rarity: document.getElementById('productRarity').value,
+                type: document.getElementById('productCategory').value,
+                limited: document.getElementById('productLimited').checked
+            };
+            
+            if (isEditing) {
+                // Actualizar producto existente
+                const index = products.findIndex(p => p.id === parseInt(productId));
+                if (index !== -1) {
+                    products[index] = product;
+                }
+            } else {
+                // Agregar nuevo producto
+                products.push(product);
+            }
+            
+            localStorage.setItem('doggyProducts', JSON.stringify(products));
+            loadProducts();
+            updateDashboard();
+            resetForm();
+            
+            alert(isEditing ? '✅ Producto actualizado correctamente' : '✅ Producto agregado correctamente');
+        }
+
+        // Editar producto
+        function editProduct(id) {
+            const products = JSON.parse(localStorage.getItem('doggyProducts'));
+            const product = products.find(p => p.id === id);
+            
+            if (product) {
+                document.getElementById('formTitle').textContent = '✏️ Editar Producto';
+                document.getElementById('productId').value = product.id;
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productStock').value = product.stock;
+                document.getElementById('productDescription').value = product.description;
+                document.getElementById('productCategory').value = product.category;
+                document.getElementById('productRarity').value = product.rarity;
+                document.getElementById('productLimited').checked = product.limited || false;
+                
+                document.getElementById('saveBtn').textContent = '💾 Actualizar Producto';
+                document.getElementById('cancelBtn').style.display = 'inline-block';
+                
+                // Scroll al formulario
+                document.getElementById('productForm').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Eliminar producto
+        function deleteProduct(id) {
+            if (confirm('¿Estás seguro de eliminar este producto?')) {
+                const products = JSON.parse(localStorage.getItem('doggyProducts'));
+                const updatedProducts = products.filter(p => p.id !== id);
+                
+                localStorage.setItem('doggyProducts', JSON.stringify(updatedProducts));
+                loadProducts();
+                updateDashboard();
+                
+                alert('🗑️ Producto eliminado correctamente');
+            }
+        }
+
+        // Cancelar edición
+        function cancelEdit() {
+            resetForm();
+        }
+
+        // Resetear formulario
+        function resetForm() {
+            document.getElementById('productForm').reset();
+            document.getElementById('productId').value = '';
+            document.getElementById('formTitle').textContent = '➕ Agregar Nuevo Producto';
+            document.getElementById('saveBtn').textContent = '💾 Guardar Producto';
+            document.getElementById('cancelBtn').style.display = 'none';
+        }
+
+        // Cerrar sesión
+        function logout() {
+            if (confirm('¿Estás seguro de cerrar sesión?')) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Funciones auxiliares
+        function getRarityText(rarity) {
+            const rarityTexts = {
+                'common': 'Común',
+                'rare': 'Raro',
+                'epic': 'Épico',
+                'legendary': 'Legendario'
+            };
+            return rarityTexts[rarity] || '';
+        }
+
+        function getRarityBadgeClass(rarity) {
+            const badgeClasses = {
+                'common': 'bg-secondary',
+                'rare': 'bg-primary',
+                'epic': 'bg-purple',
+                'legendary': 'bg-warning'
+            };
+            return badgeClasses[rarity] || 'bg-secondary';
+        }
+    </script>
+</body>
+</html>
