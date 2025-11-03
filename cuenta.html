@@ -92,7 +92,7 @@
         </div>
 
         <div class="section-card p-4 mb-4">
-            <h3>🏠 Mis Direcciones (B-15)</h3>
+            <h3>🏠 Mis Direcciones </h3>
             
             <div class="saved-item p-3 mb-3">
                 <div class="d-flex justify-content-between align-items-start">
@@ -151,7 +151,7 @@
         </div>
 
         <div class="section-card p-4 mb-4">
-            <h3>💳 Métodos de Pago (B-15)</h3>
+            <h3>💳 Métodos de Pago </h3>
             
             <div class="saved-item p-3 mb-3">
                 <div class="d-flex justify-content-between align-items-center">
@@ -215,7 +215,7 @@
         </div>
 
         <div class="section-card p-4">
-            <h3>📦 Historial de Pedidos (B-16)</h3>
+            <h3>📦 Historial de Pedidos </h3>
             <div class="list-group" id="orderHistory">
                 <!-- El historial se cargará dinámicamente -->
             </div>
@@ -223,7 +223,7 @@
     </div>
 
     <script>
-        // Cargar información del usuario (B-08)
+        // Cargar información del usuario 
         document.addEventListener('DOMContentLoaded', function() {
             const user = JSON.parse(localStorage.getItem('doggyUser'));
             
@@ -269,7 +269,7 @@
             alert('✏️ Funcionalidad de edición de perfil en desarrollo...');
         }
 
-        // Funciones para direcciones (B-15)
+        // Funciones para direcciones
         function editAddress(type) {
             alert(`✏️ Editando dirección: ${type}`);
         }
@@ -285,7 +285,7 @@
             alert('📍 Nueva dirección guardada exitosamente');
         }
 
-        // Funciones para tarjetas (B-15)
+        // Funciones para tarjetas 
         function editCard(type) {
             alert(`✏️ Editando tarjeta: ${type}`);
         }
@@ -301,7 +301,7 @@
             alert('💳 Nueva tarjeta guardada exitosamente');
         }
 
-        // Cargar historial de pedidos (B-16)
+        // Cargar historial de pedidos 
         function loadOrderHistory() {
             const orders = [
                 {
