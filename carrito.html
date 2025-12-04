@@ -23,307 +23,233 @@
             border-radius: 10px;
         }
         
-        .skeleton {
-            background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-        }
-        
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
+        .bg-purple { background-color: #a335ee !important; }
         .rarity-common { border-left: 4px solid #b0b0b0; }
         .rarity-rare { border-left: 4px solid #0070dd; }
         .rarity-epic { border-left: 4px solid #a335ee; }
         .rarity-legendary { border-left: 4px solid #ff8000; }
         
-        .empty-cart {
-            text-align: center;
-            padding: 60px 20px;
-        }
-        
-        .empty-cart-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-        }
-
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .quantity-btn {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .cart-totals {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 20px;
-        }
+        .skeleton { /* ... (Estilos de skeleton se mantienen) ... */ }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg nav-custom">
+    <nav class="navbar navbar-expand-lg nav-custom sticky-top">
         <div class="container">
-            <a class="navbar-brand text-white fw-bold" href="index.html">🌭 Doggy's</a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link text-white mx-2" href="index.html">Inicio</a>
-                <a class="nav-link text-white mx-2" href="login.html">Iniciar Sesión</a>
-                <a class="nav-link text-white mx-2" href="rastreo.html">Rastrear</a>
+            <a class="navbar-brand text-warning fw-bold" href="index.html">DOGGY'S 🌭</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link text-white" href="index.html">Menú</a></li>
+                </ul>
+                <a href="cuenta.html" class="btn btn-outline-light me-2">Mi Cuenta</a>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
-        <h1 class="text-center mb-4">🛒 Carrito de Compras</h1>
+    <div class="container my-5">
+        <h1 class="text-center mb-5 text-warning">🛒 Carrito de Batalla</h1>
 
-        <div id="cartSkeleton">
-            <div class="card cart-item skeleton mb-3" style="height: 100px;"></div>
-            <div class="card cart-item skeleton mb-3" style="height: 100px;"></div>
-        </div>
+        <div id="cartContainer" class="row g-4"></div>
 
-        <div id="emptyCart" class="empty-cart" style="display: none;">
-            <div class="empty-cart-icon">🛒</div>
-            <h3>Tu carrito está vacío</h3>
-            <p>¡Agrega algunos productos deliciosos!</p>
-            <a href="index.html" class="btn btn-primary btn-lg">Ir a Comprar</a>
-        </div>
-
-        <div id="cartContent" style="display: none;">
-            <div id="cartItems">
-                <!-- Los productos del carrito se cargarán aquí -->
-            </div>
-
-            <div class="cart-totals">
-                <div class="row text-center">
-                    <div class="col-md-4">
-                        <h4>Subtotal:</h4>
-                        <h3 class="text-warning" id="subtotal">$0</h3>
-                    </div>
-                    <div class="col-md-4">
-                        <h4>Envío:</h4>
-                        <h3 class="text-info" id="shipping">$1.000</h3>
-                    </div>
-                    <div class="col-md-4">
-                        <h4>Total:</h4>
-                        <h3 class="text-success" id="total">$0</h3>
-                    </div>
-                </div>
-                
-                <div class="text-center mt-4">
-                    <button class="btn btn-primary btn-lg me-2" onclick="checkout()">🚀 Proceder al Pago</button>
-                    <a href="index.html" class="btn btn-outline-light btn-lg">🛍️ Seguir Comprando</a>
+        <div id="cartSummary" class="row justify-content-end mt-5" style="display:none;">
+            <div class="col-md-5">
+                <div class="p-4 cart-item">
+                    <h4 class="text-white border-bottom pb-2 mb-3">Resumen del Pedido</h4>
+                    <p class="d-flex justify-content-between">Subtotal: <span id="subtotal"></span></p>
+                    <p class="d-flex justify-content-between">Costo de Envío 🚚: <span id="shipping"></span></p>
+                    <h5 class="d-flex justify-content-between text-warning fw-bold pt-2 border-top border-warning">Total: <span id="total"></span></h5>
+                    <button class="btn btn-success w-100 mt-3" id="checkoutBtn" onclick="checkout()">✅ Finalizar Compra</button>
+                    <button class="btn btn-outline-danger w-100 mt-2" onclick="clearCart()">🗑️ Vaciar Carrito</button>
                 </div>
             </div>
+        </div>
+        
+        <div id="emptyCartMessage" class="text-center mt-5" style="display:none;">
+            <h3 class="text-white">Tu carrito está vacío 😔</h3>
+            <p>¡Añade productos para empezar la batalla!</p>
+            <a href="index.html" class="btn btn-warning mt-3">Ir al Menú</a>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Funciones del carrito
-        function getCart() {
-            return JSON.parse(localStorage.getItem('doggyCart')) || [];
-        }
+        const API_URL = 'http://localhost:8000/api';
+        let currentUser = null; 
 
-        function saveCart(cart) {
-            localStorage.setItem('doggyCart', JSON.stringify(cart));
-            loadCart();
-        }
-
-        // Actualizar cantidad
-        async function updateQuantity(productId, change) {
-            const cart = getCart();
-            const itemIndex = cart.findIndex(item => item.id === productId);
-            
-            if (itemIndex !== -1) {
-                const newQuantity = cart[itemIndex].quantity + change;
-                
-                // Validar límite máximo de 10 unidades
-                if (newQuantity > 10) {
-                    alert('❌ Máximo 10 unidades por producto');
-                    return;
-                }
-                
-                // Validar stock disponible
-                try {
-                    const response = await fetch(`http://localhost:8000/api/products/${productId}`);
-                    const product = await response.json();
-                    
-                    if (newQuantity > product.stock) {
-                        alert(`❌ Solo hay ${product.stock} unidades disponibles de ${product.name}`);
-                        return;
-                    }
-                } catch (error) {
-                    console.error('Error verificando stock:', error);
-                }
-                
-                // Validar mínimo de 1 unidad
-                if (newQuantity <= 0) {
-                    if (confirm('¿Eliminar producto del carrito?')) {
-                        cart.splice(itemIndex, 1);
-                        saveCart(cart);
-                        alert('🗑️ Producto eliminado del carrito');
-                    }
-                    return;
-                }
-                
-                cart[itemIndex].quantity = newQuantity;
-                saveCart(cart);
-                
-                // Mostrar confirmación de cambio
-                if (change > 0) {
-                    alert(`✅ Se agregó otra unidad de ${cart[itemIndex].name}`);
-                } else {
-                    alert(`📉 Se removió una unidad de ${cart[itemIndex].name}`);
-                }
-            }
-        }
-
-        // Eliminar item del carrito
-        function removeItem(productId) {
-            const cart = getCart();
-            const itemIndex = cart.findIndex(item => item.id === productId);
-            
-            if (itemIndex !== -1 && confirm('¿Estás seguro de eliminar este producto del carrito?')) {
-                const itemName = cart[itemIndex].name;
-                cart.splice(itemIndex, 1);
-                saveCart(cart);
-                alert(`🗑️ ${itemName} eliminado del carrito`);
-            }
-        }
-
-        // Cargar carrito
-        function loadCart() {
-            const cart = getCart();
-            const cartItems = document.getElementById('cartItems');
-            const emptyCart = document.getElementById('emptyCart');
-            const cartContent = document.getElementById('cartContent');
-            const cartSkeleton = document.getElementById('cartSkeleton');
-            
-            // Ocultar skeleton
-            cartSkeleton.style.display = 'none';
-            
-            if (cart.length === 0) {
-                emptyCart.style.display = 'block';
-                cartContent.style.display = 'none';
+        document.addEventListener('DOMContentLoaded', function() {
+            const userString = localStorage.getItem('doggyUser');
+            if (userString) {
+                currentUser = JSON.parse(userString);
+            } else {
+                alert('Debe iniciar sesión para ver su carrito.');
+                window.location.href = 'login.html';
                 return;
             }
+            setTimeout(loadCart, 100);
+        });
+
+        function getCart() { return JSON.parse(localStorage.getItem('doggyCart')) || []; }
+        
+        // --- FUNCIÓN loadCart y auxiliares (debe ser completa) ---
+        function loadCart() {
+            const cart = getCart();
+            const container = document.getElementById('cartContainer');
+            const summary = document.getElementById('cartSummary');
             
-            emptyCart.style.display = 'none';
-            cartContent.style.display = 'block';
-            
+            container.innerHTML = '';
+
+            if (cart.length === 0) {
+                summary.style.display = 'none';
+                document.getElementById('emptyCartMessage').style.display = 'block';
+                return;
+            }
+
+            summary.style.display = 'flex';
+            document.getElementById('emptyCartMessage').style.display = 'none';
+
             let subtotal = 0;
-            
-            cartItems.innerHTML = cart.map(item => {
-                const itemTotal = item.price * item.quantity;
-                subtotal += itemTotal;
-                const rarityClass = `rarity-${item.rarity}`;
-                const maxReached = item.quantity >= 10;
+
+            cart.forEach(item => {
+                const totalItemPrice = item.price * item.quantity;
+                subtotal += totalItemPrice;
                 
-                return `
-                    <div class="card cart-item mb-3 ${rarityClass}">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-md-4">
-                                    <h5>${item.name}</h5>
-                                    <p class="mb-0">$${item.price.toLocaleString()} c/u</p>
-                                    <small class="text-warning">${getRarityText(item.rarity)}</small>
-                                    ${maxReached ? '<small class="text-danger">🔴 Máximo alcanzado</small>' : ''}
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="quantity-controls">
-                                        <button class="btn btn-outline-light quantity-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
-                                        <span class="btn btn-light px-3">${item.quantity}</span>
-                                        <button class="btn btn-outline-light quantity-btn" onclick="updateQuantity('${item.id}', 1)" ${maxReached ? 'disabled' : ''}>+</button>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 text-end">
-                                    <h5 class="text-warning">$${itemTotal.toLocaleString()}</h5>
-                                    <button class="btn btn-danger btn-sm" onclick="removeItem('${item.id}')">🗑️ Eliminar</button>
-                                </div>
+                container.innerHTML += `
+                    <div class="col-12">
+                        <div class="cart-item p-3 d-flex align-items-center">
+                            <h2 class="me-3 mb-0">${item.image || '🌭'}</h2>
+                            <div class="flex-grow-1">
+                                <h5 class="mb-1 text-warning">${item.name} <span class="badge ${getRarityBadgeClass(item.rarity)}">${getRarityText(item.rarity)}</span></h5>
+                                <p class="mb-0">Precio unitario: $${item.price.toLocaleString()}</p>
+                            </div>
+                            <div class="d-flex align-items-center mx-4">
+                                <button class="btn btn-sm btn-outline-danger me-2" onclick="updateQuantity('${item.id}', -1)">-</button>
+                                <span class="fw-bold">${item.quantity}</span>
+                                <button class="btn btn-sm btn-outline-success ms-2" onclick="updateQuantity('${item.id}', 1)">+</button>
+                            </div>
+                            <div class="text-end">
+                                <h5 class="mb-0">$${totalItemPrice.toLocaleString()}</h5>
+                                <button class="btn btn-sm btn-danger mt-1" onclick="removeItem('${item.id}')">Eliminar</button>
                             </div>
                         </div>
                     </div>
                 `;
-            }).join('');
-            
-            const shipping = 1000;
-            const total = subtotal + shipping;
-            
+            });
+
+            const shippingCost = 1000;
+            const total = subtotal + shippingCost;
             document.getElementById('subtotal').textContent = `$${subtotal.toLocaleString()}`;
-            document.getElementById('shipping').textContent = `$${shipping.toLocaleString()}`;
+            document.getElementById('shipping').textContent = `$${shippingCost.toLocaleString()}`;
             document.getElementById('total').textContent = `$${total.toLocaleString()}`;
         }
 
-        // Checkout
-        async function checkout() {
-            const cart = getCart();
-            if (cart.length === 0) {
-                alert('🛒 Tu carrito está vacío');
-                return;
-            }
-            
-            // Verificar si el usuario está logueado
-            const user = JSON.parse(localStorage.getItem('doggyUser'));
-            if (!user) {
-                alert('🔐 Debes iniciar sesión para continuar con el pago');
-                window.location.href = 'login.html';
-                return;
-            }
-            
-            // Verificar stock antes de proceder
-            try {
-                for (const item of cart) {
-                    const response = await fetch(`http://localhost:8000/api/products/${item.id}`);
-                    const product = await response.json();
-                    
-                    if (product.stock < item.quantity) {
-                        alert(`❌ Stock insuficiente para ${product.name}. Disponible: ${product.stock}`);
-                        return;
-                    }
+        function updateQuantity(id, change) {
+            let cart = getCart();
+            const itemIndex = cart.findIndex(item => item.id === id);
+
+            if (itemIndex !== -1) {
+                cart[itemIndex].quantity += change;
+
+                if (cart[itemIndex].quantity <= 0) {
+                    cart.splice(itemIndex, 1);
                 }
-                
-                // Simular procesamiento de pago exitoso
-                const orderNumber = 'DOG-' + Date.now();
-                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) + 1000;
-                
-                alert(`✅ ¡Pedido #${orderNumber} confirmado!\nTotal: $${total.toLocaleString()}\n\nGracias por tu compra ${user.name}!`);
-                
-                // Vaciar carrito después de compra exitosa
-                localStorage.removeItem('doggyCart');
-                loadCart();
-                
-            } catch (error) {
-                console.error('Error en checkout:', error);
-                alert('❌ Error procesando el pedido');
             }
+            localStorage.setItem('doggyCart', JSON.stringify(cart));
+            loadCart();
         }
 
-        // Funciones auxiliares
+        function removeItem(id) {
+            let cart = getCart();
+            cart = cart.filter(item => item.id !== id);
+            localStorage.setItem('doggyCart', JSON.stringify(cart));
+            loadCart();
+        }
+
+        function clearCart() {
+            if (confirm('¿Estás seguro de vaciar todo el carrito?')) {
+                localStorage.removeItem('doggyCart');
+                loadCart();
+            }
+        }
+        
+        // --- CHECKOUT (Lógica de Persistencia y Redirección) ---
+        async function checkout() {
+            if (!currentUser) {
+                alert('Debe iniciar sesión para realizar el checkout.');
+                return;
+            }
+
+            const cart = getCart();
+            if (cart.length === 0) {
+                alert('El carrito está vacío.');
+                return;
+            }
+
+            const subtotalValue = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shippingCost = 1000;
+            const totalValue = subtotalValue + shippingCost;
+
+            const orderData = {
+                user_id: currentUser.id, 
+                items: cart.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity
+                })),
+                subtotal: subtotalValue,
+                shipping: shippingCost,
+                total: totalValue,
+                status: 'procesando'
+            };
+
+            document.getElementById('checkoutBtn').disabled = true;
+            document.getElementById('checkoutBtn').textContent = 'Procesando... ⏳';
+
+            try {
+                const response = await fetch(`${API_URL}/orders`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData)
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    alert(`❌ Error al finalizar compra: ${result.detail || 'Error desconocido del servidor'}`);
+                    return;
+                }
+
+                // 1. Guardar el número de pedido para la página de rastreo
+                localStorage.setItem('trackingNumber', result.order_number);
+
+                alert(`✅ ¡Pedido #${result.order_number} confirmado!`);
+                
+                // 2. Vaciar carrito y redirigir a RASTREO
+                localStorage.removeItem('doggyCart');
+                
+                window.location.href = 'rastreo.html'; // REDIRECCIÓN CLAVE
+
+            } catch (error) {
+                console.error('Error en checkout:', error);
+                alert('❌ Error de conexión con la API. Asegúrate de que el Backend está corriendo.');
+            } finally {
+                document.getElementById('checkoutBtn').disabled = false;
+                document.getElementById('checkoutBtn').textContent = '✅ Finalizar Compra';
+            }
+        }
+        
         function getRarityText(rarity) {
             const rarityTexts = {
-                'common': 'Común',
-                'rare': 'Raro',
-                'epic': 'Épico',
-                'legendary': 'Legendario'
+                'common': 'Común', 'rare': 'Raro', 'epic': 'Épico', 'legendary': 'Legendario'
             };
             return rarityTexts[rarity] || '';
         }
-
-        // Cargar carrito al iniciar
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(loadCart, 1000);
-        });
+        
+        function getRarityBadgeClass(rarity) {
+            const badgeClasses = {
+                'common': 'bg-secondary', 'rare': 'bg-primary', 'epic': 'bg-purple', 'legendary': 'bg-warning'
+            };
+            return badgeClasses[rarity] || 'bg-secondary';
+        }
     </script>
 </body>
 </html>

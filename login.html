@@ -31,223 +31,160 @@
             color: rgba(255, 255, 255, 0.7);
         }
         
-        .admin-notice {
-            background: rgba(255, 71, 87, 0.2);
-            border: 1px solid rgba(255, 71, 87, 0.5);
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 15px;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-
-        .divider {
-            position: relative;
-            text-align: center;
-            margin: 20px 0;
-        }
-        
-        .divider::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .divider span {
-            background: #667eea;
-            padding: 0 15px;
-            position: relative;
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #00f5ff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 245, 255, 0.5);
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container my-5">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="login-container p-4">
-                    <h1 class="text-center mb-4">🔐 Iniciar Sesión</h1>
+            <div class="col-md-5">
+                <div class="login-container p-4 p-md-5 shadow-lg">
+                    <h1 class="text-center mb-4 text-warning">🔐 Login</h1>
                     
-                    <!-- Notificación para administradores -->
-                    <div class="admin-notice">
-                        <strong>👨‍💼 Acceso Administrativo:</strong> Usa <code>admin@doggys.cl</code> para panel de administración
-                    </div>
-                    
-                    <form id="loginForm">
-                        <div class="mb-3">
-                            <label class="form-label">Email:</label>
-                            <input type="email" class="form-control" placeholder="tu@email.com" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Contraseña:</label>
-                            <input type="password" class="form-control" placeholder="••••••••" required>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary w-100 mb-3">Ingresar</button>
-                    </form>
-                    
-                    <div class="divider">
-                        <span>o</span>
-                    </div>
-                    
-                    <form id="registerForm">
-                        <h5 class="text-center">¿Nuevo usuario? Regístrate</h5>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Nombre completo:</label>
-                            <input type="text" class="form-control" placeholder="Tu nombre" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Email:</label>
-                            <input type="email" class="form-control" placeholder="tu@email.com" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Contraseña:</label>
-                            <input type="password" class="form-control" id="password" placeholder="••••••••" required>
-                            
-                            <div class="mt-2">
-                                <small>La contraseña debe tener:</small>
-                                <div class="form-text">
-                                    <span id="length" class="text-danger">✓ 8+ caracteres</span><br>
-                                    <span id="uppercase" class="text-danger">✓ 1 mayúscula</span><br>
-                                    <span id="number" class="text-danger">✓ 1 número</span><br>
-                                    <span id="symbol" class="text-danger">✓ 1 símbolo</span>
+                    <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab" aria-controls="login" aria-selected="true">Iniciar Sesión</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab" aria-controls="register" aria-selected="false">Crear Cuenta</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                            <h4 class="mb-4">Ingresa a Doggy's</h4>
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <label for="loginEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="loginEmail" placeholder="tu@email.com o admin@doggys.cl" required>
                                 </div>
-                            </div>
+                                <div class="mb-4">
+                                    <label for="loginPassword" class="form-label">Contraseña</label>
+                                    <input type="password" class="form-control" id="loginPassword" placeholder="••••••••" required>
+                                </div>
+                                <button type="submit" class="btn btn-warning w-100">🔥 Iniciar Sesión</button>
+                            </form>
                         </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Confirmar contraseña:</label>
-                            <input type="password" class="form-control" id="confirmPassword" placeholder="••••••••" required>
+
+                        <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                            <h4 class="mb-4">Únete a la Batalla</h4>
+                            <form id="registerForm">
+                                <div class="mb-3">
+                                    <label for="registerName" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="registerName" placeholder="Tu nombre" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="registerEmail" placeholder="correo@ejemplo.cl" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerPassword" class="form-label">Contraseña</label>
+                                    <input type="password" class="form-control" id="registerPassword" minlength="6" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+                                    <input type="password" class="form-control" id="confirmPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">✨ Crear Cuenta</button>
+                            </form>
                         </div>
-                        
-                        <button type="submit" class="btn btn-success w-100" id="registerBtn" disabled>Crear Cuenta</button>
-                    </form>
-                    
-                    <div class="text-center mt-3">
-                        <a href="index.html" class="text-white">← Volver al inicio</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Validación de contraseña en registro
-        document.getElementById('password').addEventListener('input', function() {
-            const password = this.value;
-            const requirements = {
-                length: password.length >= 8,
-                uppercase: /[A-Z]/.test(password),
-                number: /[0-9]/.test(password),
-                symbol: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
-            };
-            
-            Object.keys(requirements).forEach(key => {
-                const element = document.getElementById(key);
-                if (requirements[key]) {
-                    element.className = 'text-success';
-                } else {
-                    element.className = 'text-danger';
-                }
-            });
-            
-            const allValid = Object.values(requirements).every(valid => valid);
-            document.getElementById('registerBtn').disabled = !allValid;
-        });
-        
-        // Login de usuario
+        const API_URL = 'http://localhost:8000/api';
+
+        // Redirigir si ya hay sesión
+        const user = JSON.parse(localStorage.getItem('doggyUser'));
+        if (user && user.id) {
+            window.location.href = user.role === 'admin' ? 'admin.html' : 'cuenta.html';
+        }
+
+        // --- INICIAR SESIÓN ---
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const email = this.querySelector('input[type="email"]').value;
-            const password = this.querySelector('input[type="password"]').value;
-            
-            // Validación básica
-            if (!email || !password) {
-                alert('❌ Por favor completa todos los campos');
-                return;
-            }
-            
-            // Si es el administrador, redirigir al panel de administración
-            if (email === 'admin@doggys.cl') {
-                const adminUser = {
-                    id: 'ADMIN001',
-                    name: 'Administrador Doggy\'s',
-                    email: 'admin@doggys.cl',
-                    role: 'admin',
-                    memberSince: new Date().toISOString()
-                };
-                localStorage.setItem('doggyUser', JSON.stringify(adminUser));
-                alert('👨‍💼 ¡Bienvenido Administrador!');
-                window.location.href = 'admin.html';
-            } else {
-                // Para usuarios normales, simular login exitoso
-                const user = {
-                    id: 'USR' + Date.now(),
-                    name: email.split('@')[0],
-                    email: email,
-                    role: 'user',
-                    memberSince: new Date().toISOString(),
-                    ordersCount: 0
-                };
-                
-                localStorage.setItem('doggyUser', JSON.stringify(user));
-                alert(`✅ ¡Bienvenido ${user.name}!`);
-                window.location.href = 'cuenta.html';
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const response = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    const loggedInUser = data.user || data; 
+                    localStorage.setItem('doggyUser', JSON.stringify(loggedInUser));
+
+                    alert(`🎉 ¡Bienvenido de vuelta, ${loggedInUser.name}!`);
+
+                    if (loggedInUser.role === 'admin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'cuenta.html';
+                    }
+                } else {
+                    alert(`❌ Error de login: ${data.detail || 'Credenciales inválidas'}`);
+                }
+            } catch (error) {
+                console.error('Error en la conexión al API:', error);
+                alert('❌ Error al intentar conectar con el servidor.');
             }
         });
-        
-        // Registro de nuevo usuario
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
+
+        // --- CREAR CUENTA (Registro) ---
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            const name = this.querySelector('input[type="text"]').value;
-            const email = this.querySelector('input[type="email"]').value;
-            const password = document.getElementById('password').value;
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            // Validaciones
+
             if (password !== confirmPassword) {
                 alert('❌ Las contraseñas no coinciden');
                 return;
             }
-            
-            if (email === 'admin@doggys.cl') {
-                alert('❌ No puedes registrarte con el email de administrador');
-                return;
-            }
-            
-            // Crear nuevo usuario
-            const newUser = {
-                id: 'USR' + Date.now(),
-                name: name,
-                email: email,
-                role: 'user',
-                memberSince: new Date().toISOString(),
-                ordersCount: 0
-            };
-            
-            // Guardar usuario
-            localStorage.setItem('doggyUser', JSON.stringify(newUser));
-            
-            alert(`🎉 ¡Cuenta creada exitosamente! Bienvenido a Doggy's, ${name}`);
-            window.location.href = 'cuenta.html';
-        });
 
-        // Prevenir que se registre como administrador
-        document.querySelectorAll('input[type="email"]').forEach(input => {
-            input.addEventListener('blur', function() {
-                if (this.value === 'admin@doggys.cl' && this.closest('#registerForm')) {
-                    alert('⚠️ Este email está reservado para administración');
-                    this.value = '';
+            // Enviar datos al API para registro
+            try {
+                const response = await fetch(`${API_URL}/users`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    const createdUser = data.user;
+                    // Iniciar sesión automáticamente
+                    localStorage.setItem('doggyUser', JSON.stringify({
+                        id: createdUser._id, 
+                        name: createdUser.name,
+                        email: createdUser.email,
+                        role: createdUser.role,
+                        memberSince: createdUser.memberSince,
+                    }));
+                    
+                    alert(`🎉 ¡Cuenta creada exitosamente! Bienvenido a Doggy's, ${name}`);
+                    window.location.href = 'cuenta.html';
+                } else {
+                    alert(`❌ Error al registrar: ${data.detail || 'Email ya registrado'}`);
                 }
-            });
+            } catch (error) {
+                console.error('Error en la conexión al API:', error);
+                alert('❌ Error al intentar conectar con el servidor.');
+            }
         });
     </script>
 </body>

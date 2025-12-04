@@ -31,287 +31,189 @@
             border-radius: 15px;
         }
         
-        .form-control {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
+        .bg-purple {
+            background-color: #a020f0 !important;
         }
         
-        .form-control:focus {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: #00f5ff;
-            color: white;
-            box-shadow: 0 0 0 0.2rem rgba(0, 245, 255, 0.25);
+        .list-group-item {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.1);
         }
         
-        .table-dark {
-            background: rgba(30, 30, 50, 0.8);
+        .list-group-item-action:hover {
+            background-color: rgba(0, 0, 0, 0.4);
         }
         
-        .admin-badge {
-            background: #ff4655;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-        
-        .rarity-common { border-left: 4px solid #b0b0b0; }
-        .rarity-rare { border-left: 4px solid #0070dd; }
-        .rarity-epic { border-left: 4px solid #a335ee; }
-        .rarity-legendary { border-left: 4px solid #ff8000; }
-        
-        .stats-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 0;
+        .product-list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg nav-custom">
+    <nav class="navbar navbar-expand-lg nav-custom sticky-top">
         <div class="container">
-            <a class="navbar-brand text-white fw-bold" href="index.html">🌭 DOGGY'S ADMIN</a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link text-white mx-2" href="index.html">Inicio</a>
-                <a class="nav-link text-white mx-2" href="cuenta.html">Mi Cuenta</a>
-                <a class="nav-link text-white mx-2" onclick="logout()">Cerrar Sesión</a>
+            <a class="navbar-brand text-warning fw-bold" href="index.html">DOGGY'S ADMIN 👑</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link text-white" href="#productsSection">Productos</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="#usersSection">Usuarios</a></li>
+                </ul>
+                <button class="btn btn-danger" onclick="logout()">👋 Cerrar Sesión</button>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
-        <h1 class="text-center mb-4">🛠️ Panel de Administración</h1>
-        
-        <!-- Resumen General -->
-        <div class="row mb-4">
-            <div class="col-md-3">
-                <div class="admin-card p-3 text-center">
-                    <h3 class="stats-number" id="totalProducts">0</h3>
-                    <p>Productos</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="admin-card p-3 text-center">
-                    <h3 class="stats-number" id="totalUsers">0</h3>
-                    <p>Usuarios</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="admin-card p-3 text-center">
-                    <h3 class="stats-number" id="totalOrders">0</h3>
-                    <p>Pedidos</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="admin-card p-3 text-center">
-                    <h3 class="stats-number" id="totalRevenue">$0</h3>
-                    <p>Ingresos</p>
-                </div>
-            </div>
-        </div>
+    <div class="container my-5">
+        <h1 class="text-center mb-5 text-warning">Panel de Administración</h1>
 
-        <!-- Gestión de Productos -->
-        <div class="section-card p-4 mb-4">
-            <h3>📦 Gestión de Productos</h3>
-            
-            <!-- Formulario para agregar/editar producto -->
-            <div class="mb-4">
-                <h5 id="formTitle">➕ Agregar Nuevo Producto</h5>
-                <form id="productForm" onsubmit="saveProduct(event)">
+        <div id="productsSection" class="admin-card p-4 mb-5">
+            <h2 class="border-bottom pb-2 mb-4">🌭 Gestión de Productos</h2>
+
+            <div class="section-card p-4 mb-4">
+                <h4 id="formTitle">➕ Agregar Nuevo Producto</h4>
+                <form id="productForm">
                     <input type="hidden" id="productId">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Nombre del producto:</label>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="productName" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="productName" required>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label">Precio:</label>
-                            <input type="number" class="form-control" id="productPrice" min="0" required>
+                        <div class="col-md-3">
+                            <label for="productPrice" class="form-label">Precio ($)</label>
+                            <input type="number" class="form-control" id="productPrice" min="1" required>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label">Stock:</label>
+                        <div class="col-md-3">
+                            <label for="productStock" class="form-label">Stock</label>
                             <input type="number" class="form-control" id="productStock" min="0" required>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Descripción:</label>
+                        <div class="col-md-12">
+                            <label for="productDescription" class="form-label">Descripción</label>
                             <textarea class="form-control" id="productDescription" rows="2" required></textarea>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label">Categoría:</label>
-                            <select class="form-control" id="productCategory" required>
+                        <div class="col-md-3">
+                            <label for="productCategory" class="form-label">Categoría</label>
+                            <select id="productCategory" class="form-select" required>
                                 <option value="completos">Completos</option>
                                 <option value="hotdogs">Hot Dogs</option>
                                 <option value="especiales">Especiales</option>
                                 <option value="combos">Combos</option>
                             </select>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label">Rareza:</label>
-                            <select class="form-control" id="productRarity" required>
+                        <div class="col-md-3">
+                            <label for="productRarity" class="form-label">Rareza (Rarity)</label>
+                            <select id="productRarity" class="form-select" required>
                                 <option value="common">Común</option>
                                 <option value="rare">Raro</option>
                                 <option value="epic">Épico</option>
                                 <option value="legendary">Legendario</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-3">
+                            <label for="productImage" class="form-label">Emoji/Imagen</label>
+                            <input type="text" class="form-control" id="productImage" value="🌭">
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="productLimited">
+                                <input class="form-check-input" type="checkbox" value="" id="productLimited">
                                 <label class="form-check-label" for="productLimited">
                                     Producto Limitado
                                 </label>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Imagen (emoji):</label>
-                            <input type="text" class="form-control" id="productImage" value="🌭">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-warning" id="saveBtn">💾 Guardar Producto</button>
+                            <button type="button" class="btn btn-outline-secondary" id="cancelBtn" onclick="resetForm()" style="display:none;">Cancelar Edición</button>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary me-2" id="saveBtn">💾 Guardar Producto</button>
-                    <button type="button" class="btn btn-secondary" id="cancelBtn" style="display:none;" onclick="cancelEdit()">❌ Cancelar</button>
                 </form>
             </div>
-            
-            <!-- Lista de productos -->
-            <h5>📋 Lista de Productos</h5>
-            <div class="table-responsive">
-                <table class="table table-dark table-hover">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Precio</th>
-                            <th>Stock</th>
-                            <th>Categoría</th>
-                            <th>Rareza</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="productsTable">
-                        <!-- Los productos se cargarán aquí -->
-                    </tbody>
-                </table>
+
+            <h4>📊 Productos en el Inventario (<span id="productCount">0</span>)</h4>
+            <div id="productList" class="list-group">
+                <div class="text-center p-5" id="loadingProducts">
+                    <div class="spinner-border text-warning" role="status"></div>
+                    <p class="mt-2">Cargando productos...</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="usersSection" class="admin-card p-4 mb-5">
+            <h2 class="border-bottom pb-2 mb-4">👥 Gestión de Usuarios</h2>
+            <h4>Lista de Usuarios Registrados</h4>
+            <div id="userList" class="list-group">
+                 <div class="text-center p-5" id="loadingUsers">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2">Cargando usuarios...</p>
+                </div>
             </div>
         </div>
 
-        <!-- Gestión de Usuarios -->
-        <div class="section-card p-4">
-            <h3>👥 Usuarios Registrados</h3>
-            <div class="table-responsive">
-                <table class="table table-dark table-hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Rol</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usersTable">
-                        <!-- Los usuarios se cargarán aquí -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        let products = [];
-        let users = [];
-
-        // Verificar si es administrador
+        const API_URL = 'http://localhost:8000/api';
+        
         document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si el usuario es Admin
             const user = JSON.parse(localStorage.getItem('doggyUser'));
-            
-            if (!user || user.email !== 'admin@doggys.cl') {
-                alert('🔐 Acceso denegado. No tienes permisos de administrador.');
+            if (!user || user.role !== 'admin') {
+                alert('Acceso denegado. Solo administradores.');
                 window.location.href = 'login.html';
                 return;
             }
             
-            // Cargar datos
             loadProducts();
-            loadUsers();
-            updateDashboard();
+            loadUsers(); 
+
+            document.getElementById('productForm').addEventListener('submit', handleProductSubmit);
         });
 
-        // Cargar productos desde API
+        // --- FUNCIONES DE PRODUCTOS (CRUD) ---
+
         async function loadProducts() {
             try {
-                const response = await fetch('http://localhost:8000/api/products');
-                products = await response.json();
+                const response = await fetch(`${API_URL}/products`);
+                const products = await response.json();
+                
+                document.getElementById('loadingProducts').style.display = 'none';
+                document.getElementById('productCount').textContent = products.length;
                 displayProducts(products);
-                updateDashboard();
             } catch (error) {
                 console.error('Error cargando productos:', error);
+                document.getElementById('loadingProducts').innerHTML = '<p class="text-danger mt-2">❌ Error al cargar productos del API.</p>';
             }
         }
 
         function displayProducts(products) {
-            const productsTable = document.getElementById('productsTable');
-            productsTable.innerHTML = products.map(product => `
-                <tr class="rarity-${product.rarity}">
-                    <td>${product.name}</td>
-                    <td>$${product.price.toLocaleString()}</td>
-                    <td>${product.stock}</td>
-                    <td>${product.category}</td>
-                    <td>
-                        <span class="badge ${getRarityBadgeClass(product.rarity)}">
-                            ${getRarityText(product.rarity)}
-                        </span>
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-warning me-1" onclick="editProduct('${product._id}')">✏️ Editar</button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="deleteProduct('${product._id}')">🗑️ Eliminar</button>
-                    </td>
-                </tr>
+            const list = document.getElementById('productList');
+            list.innerHTML = products.map(product => `
+                <div class="list-group-item product-list-item">
+                    <div>
+                        <span class="fs-4 me-2">${product.image}</span>
+                        <h5 class="mb-1 d-inline-block">${product.name}</h5>
+                        <span class="badge ${getRarityBadgeClass(product.rarity)} ms-2">${getRarityText(product.rarity)}</span>
+                        ${product.limited ? '<span class="badge bg-danger ms-2">LIMITADO</span>' : ''}
+                        <small class="text-muted d-block ms-5">Stock: ${product.stock} | $${product.price.toLocaleString()}</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-info me-2" onclick="editProduct('${product._id}')">✏️ Editar</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteProduct('${product._id}', '${product.name}')">🗑️ Eliminar</button>
+                    </div>
+                </div>
             `).join('');
         }
 
-        // Cargar usuarios desde API
-        async function loadUsers() {
-            try {
-                const response = await fetch('http://localhost:8000/api/users');
-                users = await response.json();
-                displayUsers(users);
-            } catch (error) {
-                console.error('Error cargando usuarios:', error);
-            }
-        }
-
-        function displayUsers(users) {
-            const usersTable = document.getElementById('usersTable');
-            usersTable.innerHTML = users.map(user => `
-                <tr>
-                    <td>${user._id}</td>
-                    <td>${user.name}</td>
-                    <td>${user.email}</td>
-                    <td>
-                        <span class="badge ${user.role === 'admin' ? 'bg-danger' : 'bg-secondary'}">
-                            ${user.role}
-                        </span>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        // Actualizar dashboard
-        function updateDashboard() {
-            document.getElementById('totalProducts').textContent = products.length;
-            document.getElementById('totalUsers').textContent = users.length;
-            document.getElementById('totalOrders').textContent = '0'; // Por implementar
-            document.getElementById('totalRevenue').textContent = '$0'; // Por implementar
-        }
-
-        // Guardar producto (nuevo o editado)
-        async function saveProduct(event) {
-            event.preventDefault();
+        async function handleProductSubmit(e) {
+            e.preventDefault();
             
+            const id = document.getElementById('productId').value;
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_URL}/products/${id}` : `${API_URL}/products`;
+
             const productData = {
                 name: document.getElementById('productName').value,
                 price: parseInt(document.getElementById('productPrice').value),
@@ -320,62 +222,41 @@
                 category: document.getElementById('productCategory').value,
                 rarity: document.getElementById('productRarity').value,
                 image: document.getElementById('productImage').value,
-                type: document.getElementById('productCategory').value,
-                limited: document.getElementById('productLimited').checked
+                limited: document.getElementById('productLimited').checked,
+                type: document.getElementById('productCategory').value 
             };
             
-            const productId = document.getElementById('productId').value;
-            const isEditing = productId !== '';
-            
+            document.getElementById('saveBtn').disabled = true;
+
             try {
-                if (isEditing) {
-                    await updateProduct(productId, productData);
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(productData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(data.message);
+                    resetForm();
+                    loadProducts();
                 } else {
-                    await createProduct(productData);
+                    alert(`❌ Error: ${data.detail || 'Algo salió mal. (Revisa la consola)'}`);
                 }
-                
-                loadProducts();
-                resetForm();
             } catch (error) {
-                console.error('Error guardando producto:', error);
-                alert('❌ Error guardando producto');
+                console.error('Error al guardar producto:', error);
+                alert('❌ Error de conexión con el servidor.');
+            } finally {
+                document.getElementById('saveBtn').disabled = false;
             }
         }
 
-        // Crear producto
-        async function createProduct(productData) {
-            const response = await fetch('http://localhost:8000/api/products', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(productData)
-            });
-            const result = await response.json();
-            alert('✅ Producto creado correctamente');
-            return result;
-        }
-
-        // Actualizar producto
-        async function updateProduct(productId, productData) {
-            const response = await fetch(`http://localhost:8000/api/products/${productId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(productData)
-            });
-            const result = await response.json();
-            alert('✅ Producto actualizado correctamente');
-            return result;
-        }
-
-        // Editar producto
-        function editProduct(productId) {
-            const product = products.find(p => p._id === productId);
-            
-            if (product) {
-                document.getElementById('formTitle').textContent = '✏️ Editar Producto';
+        async function editProduct(id) {
+            try {
+                const response = await fetch(`${API_URL}/products/${id}`);
+                const product = await response.json();
+                
                 document.getElementById('productId').value = product._id;
                 document.getElementById('productName').value = product.name;
                 document.getElementById('productPrice').value = product.price;
@@ -386,35 +267,41 @@
                 document.getElementById('productImage').value = product.image;
                 document.getElementById('productLimited').checked = product.limited || false;
                 
+                document.getElementById('formTitle').textContent = `✏️ Editar Producto: ${product.name}`;
                 document.getElementById('saveBtn').textContent = '💾 Actualizar Producto';
                 document.getElementById('cancelBtn').style.display = 'inline-block';
+
+                document.getElementById('productsSection').scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error al cargar producto para edición:', error);
+                alert('❌ No se pudo cargar el producto.');
+            }
+        }
+
+        async function deleteProduct(id, name) {
+            if (!confirm(`¿Estás seguro de ELIMINAR permanentemente el producto: ${name}?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/products/${id}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
                 
-                document.getElementById('productForm').scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // Eliminar producto
-        async function deleteProduct(productId) {
-            if (confirm('¿Estás seguro de eliminar este producto?')) {
-                try {
-                    await fetch(`http://localhost:8000/api/products/${productId}`, {
-                        method: 'DELETE'
-                    });
-                    alert('🗑️ Producto eliminado correctamente');
+                if (response.ok) {
+                    alert(data.message);
                     loadProducts();
-                } catch (error) {
-                    console.error('Error eliminando producto:', error);
-                    alert('❌ Error eliminando producto');
+                } else {
+                    alert(`❌ Error al eliminar: ${data.detail || 'Producto no encontrado.'}`);
                 }
+            } catch (error) {
+                console.error('Error al eliminar producto:', error);
+                alert('❌ Error de conexión con el servidor.');
             }
         }
 
-        // Cancelar edición
-        function cancelEdit() {
-            resetForm();
-        }
-
-        // Resetear formulario
         function resetForm() {
             document.getElementById('productForm').reset();
             document.getElementById('productId').value = '';
@@ -424,7 +311,38 @@
             document.getElementById('cancelBtn').style.display = 'none';
         }
 
-        // Cerrar sesión
+        // --- FUNCIONES DE USUARIOS ---
+        
+        async function loadUsers() {
+            try {
+                const response = await fetch(`${API_URL}/users`);
+                const users = await response.json();
+                
+                document.getElementById('loadingUsers').style.display = 'none';
+                displayUsers(users);
+            } catch (error) {
+                console.error('Error cargando usuarios:', error);
+                document.getElementById('loadingUsers').innerHTML = '<p class="text-danger mt-2">❌ Error al cargar usuarios del API.</p>';
+            }
+        }
+
+        function displayUsers(users) {
+            const list = document.getElementById('userList');
+            list.innerHTML = users.map(user => `
+                <div class="list-group-item list-group-item-action product-list-item">
+                    <div>
+                        <h5 class="mb-1 d-inline-block">${user.name} <small class="badge bg-secondary">${user.role.toUpperCase()}</small></h5>
+                        <small class="text-muted d-block">${user.email}</small>
+                    </div>
+                    <div>
+                        <small class="text-info">ID: ${user._id}</small>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- FUNCIONES AUXILIARES Y CERRAR SESIÓN ---
+
         function logout() {
             if (confirm('¿Estás seguro de cerrar sesión?')) {
                 localStorage.removeItem('doggyUser');
@@ -432,7 +350,6 @@
             }
         }
 
-        // Funciones auxiliares
         function getRarityText(rarity) {
             const rarityTexts = {
                 'common': 'Común',
